@@ -103,7 +103,6 @@ export default async function HomePage() {
           )}
         </section>
       </main>
-
       <footer className="dashboard-footer">
         <p>Powered by Next.js & Payload CMS</p>
       </footer>
