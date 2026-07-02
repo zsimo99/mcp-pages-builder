@@ -64,11 +64,15 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    'payload-mcp-api-keys': PayloadMcpApiKeyAuthOperations;
   };
   blocks: {};
   collections: {
     users: User;
     media: Media;
+    page: Page;
+    test: Test;
+    'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,13 +82,16 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    page: PageSelect<false> | PageSelect<true>;
+    test: TestSelect<false> | TestSelect<true>;
+    'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {};
@@ -93,7 +100,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | PayloadMcpApiKey;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -117,12 +124,30 @@ export interface UserAuthOperations {
     password: string;
   };
 }
+export interface PayloadMcpApiKeyAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -147,7 +172,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -163,10 +188,2710 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  Sections?:
+    | {
+        content?: {
+          widgets?:
+            | (
+                | {
+                    content?: {
+                      text?: string | null;
+                    };
+                    style?: {
+                      space?: {
+                        mt?: number | null;
+                        mb?: number | null;
+                        ml?: number | null;
+                        mr?: number | null;
+                        pt?: number | null;
+                        pb?: number | null;
+                        pl?: number | null;
+                        pr?: number | null;
+                      };
+                      size?: {
+                        width?: {
+                          val?: number | null;
+                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                        };
+                        height?: {
+                          val?: number | null;
+                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                        };
+                      };
+                      tp?: {
+                        textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+                        fontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                        fontSize?: string | null;
+                        lineHeight?: string | null;
+                        color?: string | null;
+                        textTransform?: ('none' | 'capitalize' | 'uppercase' | 'lowercase') | null;
+                      };
+                    };
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'text_block';
+                  }
+                | {
+                    content?: {
+                      children?:
+                        | (
+                            | {
+                                content?: {
+                                  text?: string | null;
+                                };
+                                style?: {
+                                  space?: {
+                                    mt?: number | null;
+                                    mb?: number | null;
+                                    ml?: number | null;
+                                    mr?: number | null;
+                                    pt?: number | null;
+                                    pb?: number | null;
+                                    pl?: number | null;
+                                    pr?: number | null;
+                                  };
+                                  size?: {
+                                    width?: {
+                                      val?: number | null;
+                                      unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                    };
+                                    height?: {
+                                      val?: number | null;
+                                      unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                    };
+                                  };
+                                  tp?: {
+                                    textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+                                    fontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                                    fontSize?: string | null;
+                                    lineHeight?: string | null;
+                                    color?: string | null;
+                                    textTransform?: ('none' | 'capitalize' | 'uppercase' | 'lowercase') | null;
+                                  };
+                                };
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: 'text_block';
+                              }
+                            | {
+                                content: {
+                                  image: number | Media;
+                                  altText?: string | null;
+                                };
+                                style?: {
+                                  space?: {
+                                    mt?: number | null;
+                                    mb?: number | null;
+                                    ml?: number | null;
+                                    mr?: number | null;
+                                    pt?: number | null;
+                                    pb?: number | null;
+                                    pl?: number | null;
+                                    pr?: number | null;
+                                  };
+                                  size?: {
+                                    width?: {
+                                      val?: number | null;
+                                      unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                    };
+                                    height?: {
+                                      val?: number | null;
+                                      unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                    };
+                                  };
+                                  pos?: {
+                                    position?: ('static' | 'relative' | 'absolute' | 'fixed' | 'sticky') | null;
+                                    top?: number | null;
+                                    bottom?: number | null;
+                                    left?: number | null;
+                                    right?: number | null;
+                                    'z-index'?: number | null;
+                                  };
+                                  bg?: {
+                                    bg?: string | null;
+                                    bgImage?: (number | null) | Media;
+                                    bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                    bgPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                                    bgRepeat?: ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                                    overlay?: boolean | null;
+                                    overlayColor?: string | null;
+                                    overlayOpacity?: number | null;
+                                  };
+                                };
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: 'image_block';
+                              }
+                            | {
+                                content?: {
+                                  children?:
+                                    | (
+                                        | {
+                                            content?: {
+                                              text?: string | null;
+                                            };
+                                            style?: {
+                                              space?: {
+                                                mt?: number | null;
+                                                mb?: number | null;
+                                                ml?: number | null;
+                                                mr?: number | null;
+                                                pt?: number | null;
+                                                pb?: number | null;
+                                                pl?: number | null;
+                                                pr?: number | null;
+                                              };
+                                              size?: {
+                                                width?: {
+                                                  val?: number | null;
+                                                  unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                };
+                                                height?: {
+                                                  val?: number | null;
+                                                  unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                };
+                                              };
+                                              tp?: {
+                                                textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+                                                fontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                                                fontSize?: string | null;
+                                                lineHeight?: string | null;
+                                                color?: string | null;
+                                                textTransform?:
+                                                  ('none' | 'capitalize' | 'uppercase' | 'lowercase') | null;
+                                              };
+                                            };
+                                            id?: string | null;
+                                            blockName?: string | null;
+                                            blockType: 'text_block';
+                                          }
+                                        | {
+                                            content: {
+                                              image: number | Media;
+                                              altText?: string | null;
+                                            };
+                                            style?: {
+                                              space?: {
+                                                mt?: number | null;
+                                                mb?: number | null;
+                                                ml?: number | null;
+                                                mr?: number | null;
+                                                pt?: number | null;
+                                                pb?: number | null;
+                                                pl?: number | null;
+                                                pr?: number | null;
+                                              };
+                                              size?: {
+                                                width?: {
+                                                  val?: number | null;
+                                                  unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                };
+                                                height?: {
+                                                  val?: number | null;
+                                                  unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                };
+                                              };
+                                              pos?: {
+                                                position?:
+                                                  ('static' | 'relative' | 'absolute' | 'fixed' | 'sticky') | null;
+                                                top?: number | null;
+                                                bottom?: number | null;
+                                                left?: number | null;
+                                                right?: number | null;
+                                                'z-index'?: number | null;
+                                              };
+                                              bg?: {
+                                                bg?: string | null;
+                                                bgImage?: (number | null) | Media;
+                                                bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                                bgPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                                                bgRepeat?: ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                                                overlay?: boolean | null;
+                                                overlayColor?: string | null;
+                                                overlayOpacity?: number | null;
+                                              };
+                                            };
+                                            id?: string | null;
+                                            blockName?: string | null;
+                                            blockType: 'image_block';
+                                          }
+                                        | {
+                                            content?: {
+                                              children?:
+                                                | (
+                                                    | {
+                                                        content?: {
+                                                          text?: string | null;
+                                                        };
+                                                        style?: {
+                                                          space?: {
+                                                            mt?: number | null;
+                                                            mb?: number | null;
+                                                            ml?: number | null;
+                                                            mr?: number | null;
+                                                            pt?: number | null;
+                                                            pb?: number | null;
+                                                            pl?: number | null;
+                                                            pr?: number | null;
+                                                          };
+                                                          size?: {
+                                                            width?: {
+                                                              val?: number | null;
+                                                              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                            };
+                                                            height?: {
+                                                              val?: number | null;
+                                                              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                            };
+                                                          };
+                                                          tp?: {
+                                                            textAlign?:
+                                                              ('left' | 'center' | 'right' | 'justify') | null;
+                                                            fontWeight?:
+                                                              ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                                                            fontSize?: string | null;
+                                                            lineHeight?: string | null;
+                                                            color?: string | null;
+                                                            textTransform?:
+                                                              | ('none' | 'capitalize' | 'uppercase' | 'lowercase')
+                                                              | null;
+                                                          };
+                                                        };
+                                                        id?: string | null;
+                                                        blockName?: string | null;
+                                                        blockType: 'text_block';
+                                                      }
+                                                    | {
+                                                        content: {
+                                                          image: number | Media;
+                                                          altText?: string | null;
+                                                        };
+                                                        style?: {
+                                                          space?: {
+                                                            mt?: number | null;
+                                                            mb?: number | null;
+                                                            ml?: number | null;
+                                                            mr?: number | null;
+                                                            pt?: number | null;
+                                                            pb?: number | null;
+                                                            pl?: number | null;
+                                                            pr?: number | null;
+                                                          };
+                                                          size?: {
+                                                            width?: {
+                                                              val?: number | null;
+                                                              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                            };
+                                                            height?: {
+                                                              val?: number | null;
+                                                              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                            };
+                                                          };
+                                                          pos?: {
+                                                            position?:
+                                                              | (
+                                                                  | 'static'
+                                                                  | 'relative'
+                                                                  | 'absolute'
+                                                                  | 'fixed'
+                                                                  | 'sticky'
+                                                                )
+                                                              | null;
+                                                            top?: number | null;
+                                                            bottom?: number | null;
+                                                            left?: number | null;
+                                                            right?: number | null;
+                                                            'z-index'?: number | null;
+                                                          };
+                                                          bg?: {
+                                                            bg?: string | null;
+                                                            bgImage?: (number | null) | Media;
+                                                            bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                                            bgPosition?:
+                                                              ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                                                            bgRepeat?:
+                                                              ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                                                            overlay?: boolean | null;
+                                                            overlayColor?: string | null;
+                                                            overlayOpacity?: number | null;
+                                                          };
+                                                        };
+                                                        id?: string | null;
+                                                        blockName?: string | null;
+                                                        blockType: 'image_block';
+                                                      }
+                                                    | {
+                                                        content?: {
+                                                          children?:
+                                                            | (
+                                                                | {
+                                                                    content?: {
+                                                                      text?: string | null;
+                                                                    };
+                                                                    style?: {
+                                                                      space?: {
+                                                                        mt?: number | null;
+                                                                        mb?: number | null;
+                                                                        ml?: number | null;
+                                                                        mr?: number | null;
+                                                                        pt?: number | null;
+                                                                        pb?: number | null;
+                                                                        pl?: number | null;
+                                                                        pr?: number | null;
+                                                                      };
+                                                                      size?: {
+                                                                        width?: {
+                                                                          val?: number | null;
+                                                                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                                        };
+                                                                        height?: {
+                                                                          val?: number | null;
+                                                                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                                        };
+                                                                      };
+                                                                      tp?: {
+                                                                        textAlign?:
+                                                                          | ('left' | 'center' | 'right' | 'justify')
+                                                                          | null;
+                                                                        fontWeight?:
+                                                                          | (
+                                                                              | '300'
+                                                                              | '400'
+                                                                              | '500'
+                                                                              | '600'
+                                                                              | '700'
+                                                                              | '800'
+                                                                            )
+                                                                          | null;
+                                                                        fontSize?: string | null;
+                                                                        lineHeight?: string | null;
+                                                                        color?: string | null;
+                                                                        textTransform?:
+                                                                          | (
+                                                                              | 'none'
+                                                                              | 'capitalize'
+                                                                              | 'uppercase'
+                                                                              | 'lowercase'
+                                                                            )
+                                                                          | null;
+                                                                      };
+                                                                    };
+                                                                    id?: string | null;
+                                                                    blockName?: string | null;
+                                                                    blockType: 'text_block';
+                                                                  }
+                                                                | {
+                                                                    content: {
+                                                                      image: number | Media;
+                                                                      altText?: string | null;
+                                                                    };
+                                                                    style?: {
+                                                                      space?: {
+                                                                        mt?: number | null;
+                                                                        mb?: number | null;
+                                                                        ml?: number | null;
+                                                                        mr?: number | null;
+                                                                        pt?: number | null;
+                                                                        pb?: number | null;
+                                                                        pl?: number | null;
+                                                                        pr?: number | null;
+                                                                      };
+                                                                      size?: {
+                                                                        width?: {
+                                                                          val?: number | null;
+                                                                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                                        };
+                                                                        height?: {
+                                                                          val?: number | null;
+                                                                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                                        };
+                                                                      };
+                                                                      pos?: {
+                                                                        position?:
+                                                                          | (
+                                                                              | 'static'
+                                                                              | 'relative'
+                                                                              | 'absolute'
+                                                                              | 'fixed'
+                                                                              | 'sticky'
+                                                                            )
+                                                                          | null;
+                                                                        top?: number | null;
+                                                                        bottom?: number | null;
+                                                                        left?: number | null;
+                                                                        right?: number | null;
+                                                                        'z-index'?: number | null;
+                                                                      };
+                                                                      bg?: {
+                                                                        bg?: string | null;
+                                                                        bgImage?: (number | null) | Media;
+                                                                        bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                                                        bgPosition?:
+                                                                          | (
+                                                                              | 'center'
+                                                                              | 'top'
+                                                                              | 'bottom'
+                                                                              | 'left'
+                                                                              | 'right'
+                                                                            )
+                                                                          | null;
+                                                                        bgRepeat?:
+                                                                          | (
+                                                                              | 'no-repeat'
+                                                                              | 'repeat'
+                                                                              | 'repeat-x'
+                                                                              | 'repeat-y'
+                                                                            )
+                                                                          | null;
+                                                                        overlay?: boolean | null;
+                                                                        overlayColor?: string | null;
+                                                                        overlayOpacity?: number | null;
+                                                                      };
+                                                                    };
+                                                                    id?: string | null;
+                                                                    blockName?: string | null;
+                                                                    blockType: 'image_block';
+                                                                  }
+                                                                | {
+                                                                    content?: {
+                                                                      children?:
+                                                                        | (
+                                                                            | {
+                                                                                content?: {
+                                                                                  text?: string | null;
+                                                                                };
+                                                                                style?: {
+                                                                                  space?: {
+                                                                                    mt?: number | null;
+                                                                                    mb?: number | null;
+                                                                                    ml?: number | null;
+                                                                                    mr?: number | null;
+                                                                                    pt?: number | null;
+                                                                                    pb?: number | null;
+                                                                                    pl?: number | null;
+                                                                                    pr?: number | null;
+                                                                                  };
+                                                                                  size?: {
+                                                                                    width?: {
+                                                                                      val?: number | null;
+                                                                                      unit?:
+                                                                                        | ('px' | '%' | 'vw' | 'vh')
+                                                                                        | null;
+                                                                                    };
+                                                                                    height?: {
+                                                                                      val?: number | null;
+                                                                                      unit?:
+                                                                                        | ('px' | '%' | 'vw' | 'vh')
+                                                                                        | null;
+                                                                                    };
+                                                                                  };
+                                                                                  tp?: {
+                                                                                    textAlign?:
+                                                                                      | (
+                                                                                          | 'left'
+                                                                                          | 'center'
+                                                                                          | 'right'
+                                                                                          | 'justify'
+                                                                                        )
+                                                                                      | null;
+                                                                                    fontWeight?:
+                                                                                      | (
+                                                                                          | '300'
+                                                                                          | '400'
+                                                                                          | '500'
+                                                                                          | '600'
+                                                                                          | '700'
+                                                                                          | '800'
+                                                                                        )
+                                                                                      | null;
+                                                                                    fontSize?: string | null;
+                                                                                    lineHeight?: string | null;
+                                                                                    color?: string | null;
+                                                                                    textTransform?:
+                                                                                      | (
+                                                                                          | 'none'
+                                                                                          | 'capitalize'
+                                                                                          | 'uppercase'
+                                                                                          | 'lowercase'
+                                                                                        )
+                                                                                      | null;
+                                                                                  };
+                                                                                };
+                                                                                id?: string | null;
+                                                                                blockName?: string | null;
+                                                                                blockType: 'text_block';
+                                                                              }
+                                                                            | {
+                                                                                content: {
+                                                                                  image: number | Media;
+                                                                                  altText?: string | null;
+                                                                                };
+                                                                                style?: {
+                                                                                  space?: {
+                                                                                    mt?: number | null;
+                                                                                    mb?: number | null;
+                                                                                    ml?: number | null;
+                                                                                    mr?: number | null;
+                                                                                    pt?: number | null;
+                                                                                    pb?: number | null;
+                                                                                    pl?: number | null;
+                                                                                    pr?: number | null;
+                                                                                  };
+                                                                                  size?: {
+                                                                                    width?: {
+                                                                                      val?: number | null;
+                                                                                      unit?:
+                                                                                        | ('px' | '%' | 'vw' | 'vh')
+                                                                                        | null;
+                                                                                    };
+                                                                                    height?: {
+                                                                                      val?: number | null;
+                                                                                      unit?:
+                                                                                        | ('px' | '%' | 'vw' | 'vh')
+                                                                                        | null;
+                                                                                    };
+                                                                                  };
+                                                                                  pos?: {
+                                                                                    position?:
+                                                                                      | (
+                                                                                          | 'static'
+                                                                                          | 'relative'
+                                                                                          | 'absolute'
+                                                                                          | 'fixed'
+                                                                                          | 'sticky'
+                                                                                        )
+                                                                                      | null;
+                                                                                    top?: number | null;
+                                                                                    bottom?: number | null;
+                                                                                    left?: number | null;
+                                                                                    right?: number | null;
+                                                                                    'z-index'?: number | null;
+                                                                                  };
+                                                                                  bg?: {
+                                                                                    bg?: string | null;
+                                                                                    bgImage?: (number | null) | Media;
+                                                                                    bgSize?:
+                                                                                      | ('cover' | 'contain' | 'auto')
+                                                                                      | null;
+                                                                                    bgPosition?:
+                                                                                      | (
+                                                                                          | 'center'
+                                                                                          | 'top'
+                                                                                          | 'bottom'
+                                                                                          | 'left'
+                                                                                          | 'right'
+                                                                                        )
+                                                                                      | null;
+                                                                                    bgRepeat?:
+                                                                                      | (
+                                                                                          | 'no-repeat'
+                                                                                          | 'repeat'
+                                                                                          | 'repeat-x'
+                                                                                          | 'repeat-y'
+                                                                                        )
+                                                                                      | null;
+                                                                                    overlay?: boolean | null;
+                                                                                    overlayColor?: string | null;
+                                                                                    overlayOpacity?: number | null;
+                                                                                  };
+                                                                                };
+                                                                                id?: string | null;
+                                                                                blockName?: string | null;
+                                                                                blockType: 'image_block';
+                                                                              }
+                                                                            | {
+                                                                                content?: {
+                                                                                  children?:
+                                                                                    | (
+                                                                                        | {
+                                                                                            content?: {
+                                                                                              text?: string | null;
+                                                                                            };
+                                                                                            style?: {
+                                                                                              space?: {
+                                                                                                mt?: number | null;
+                                                                                                mb?: number | null;
+                                                                                                ml?: number | null;
+                                                                                                mr?: number | null;
+                                                                                                pt?: number | null;
+                                                                                                pb?: number | null;
+                                                                                                pl?: number | null;
+                                                                                                pr?: number | null;
+                                                                                              };
+                                                                                              size?: {
+                                                                                                width?: {
+                                                                                                  val?: number | null;
+                                                                                                  unit?:
+                                                                                                    | (
+                                                                                                        | 'px'
+                                                                                                        | '%'
+                                                                                                        | 'vw'
+                                                                                                        | 'vh'
+                                                                                                      )
+                                                                                                    | null;
+                                                                                                };
+                                                                                                height?: {
+                                                                                                  val?: number | null;
+                                                                                                  unit?:
+                                                                                                    | (
+                                                                                                        | 'px'
+                                                                                                        | '%'
+                                                                                                        | 'vw'
+                                                                                                        | 'vh'
+                                                                                                      )
+                                                                                                    | null;
+                                                                                                };
+                                                                                              };
+                                                                                              tp?: {
+                                                                                                textAlign?:
+                                                                                                  | (
+                                                                                                      | 'left'
+                                                                                                      | 'center'
+                                                                                                      | 'right'
+                                                                                                      | 'justify'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                fontWeight?:
+                                                                                                  | (
+                                                                                                      | '300'
+                                                                                                      | '400'
+                                                                                                      | '500'
+                                                                                                      | '600'
+                                                                                                      | '700'
+                                                                                                      | '800'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                fontSize?:
+                                                                                                  string | null;
+                                                                                                lineHeight?:
+                                                                                                  string | null;
+                                                                                                color?: string | null;
+                                                                                                textTransform?:
+                                                                                                  | (
+                                                                                                      | 'none'
+                                                                                                      | 'capitalize'
+                                                                                                      | 'uppercase'
+                                                                                                      | 'lowercase'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                              };
+                                                                                            };
+                                                                                            id?: string | null;
+                                                                                            blockName?: string | null;
+                                                                                            blockType: 'text_block';
+                                                                                          }
+                                                                                        | {
+                                                                                            content: {
+                                                                                              image: number | Media;
+                                                                                              altText?: string | null;
+                                                                                            };
+                                                                                            style?: {
+                                                                                              space?: {
+                                                                                                mt?: number | null;
+                                                                                                mb?: number | null;
+                                                                                                ml?: number | null;
+                                                                                                mr?: number | null;
+                                                                                                pt?: number | null;
+                                                                                                pb?: number | null;
+                                                                                                pl?: number | null;
+                                                                                                pr?: number | null;
+                                                                                              };
+                                                                                              size?: {
+                                                                                                width?: {
+                                                                                                  val?: number | null;
+                                                                                                  unit?:
+                                                                                                    | (
+                                                                                                        | 'px'
+                                                                                                        | '%'
+                                                                                                        | 'vw'
+                                                                                                        | 'vh'
+                                                                                                      )
+                                                                                                    | null;
+                                                                                                };
+                                                                                                height?: {
+                                                                                                  val?: number | null;
+                                                                                                  unit?:
+                                                                                                    | (
+                                                                                                        | 'px'
+                                                                                                        | '%'
+                                                                                                        | 'vw'
+                                                                                                        | 'vh'
+                                                                                                      )
+                                                                                                    | null;
+                                                                                                };
+                                                                                              };
+                                                                                              pos?: {
+                                                                                                position?:
+                                                                                                  | (
+                                                                                                      | 'static'
+                                                                                                      | 'relative'
+                                                                                                      | 'absolute'
+                                                                                                      | 'fixed'
+                                                                                                      | 'sticky'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                top?: number | null;
+                                                                                                bottom?: number | null;
+                                                                                                left?: number | null;
+                                                                                                right?: number | null;
+                                                                                                'z-index'?:
+                                                                                                  number | null;
+                                                                                              };
+                                                                                              bg?: {
+                                                                                                bg?: string | null;
+                                                                                                bgImage?:
+                                                                                                  | (number | null)
+                                                                                                  | Media;
+                                                                                                bgSize?:
+                                                                                                  | (
+                                                                                                      | 'cover'
+                                                                                                      | 'contain'
+                                                                                                      | 'auto'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                bgPosition?:
+                                                                                                  | (
+                                                                                                      | 'center'
+                                                                                                      | 'top'
+                                                                                                      | 'bottom'
+                                                                                                      | 'left'
+                                                                                                      | 'right'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                bgRepeat?:
+                                                                                                  | (
+                                                                                                      | 'no-repeat'
+                                                                                                      | 'repeat'
+                                                                                                      | 'repeat-x'
+                                                                                                      | 'repeat-y'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                overlay?:
+                                                                                                  boolean | null;
+                                                                                                overlayColor?:
+                                                                                                  string | null;
+                                                                                                overlayOpacity?:
+                                                                                                  number | null;
+                                                                                              };
+                                                                                            };
+                                                                                            id?: string | null;
+                                                                                            blockName?: string | null;
+                                                                                            blockType: 'image_block';
+                                                                                          }
+                                                                                        | {
+                                                                                            content?: {
+                                                                                              children?:
+                                                                                                | (
+                                                                                                    | {
+                                                                                                        content?: {
+                                                                                                          text?:
+                                                                                                            | string
+                                                                                                            | null;
+                                                                                                        };
+                                                                                                        style?: {
+                                                                                                          space?: {
+                                                                                                            mt?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            mb?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            ml?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            mr?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pt?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pb?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pl?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pr?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                          size?: {
+                                                                                                            width?: {
+                                                                                                              val?:
+                                                                                                                | number
+                                                                                                                | null;
+                                                                                                              unit?:
+                                                                                                                | (
+                                                                                                                    | 'px'
+                                                                                                                    | '%'
+                                                                                                                    | 'vw'
+                                                                                                                    | 'vh'
+                                                                                                                  )
+                                                                                                                | null;
+                                                                                                            };
+                                                                                                            height?: {
+                                                                                                              val?:
+                                                                                                                | number
+                                                                                                                | null;
+                                                                                                              unit?:
+                                                                                                                | (
+                                                                                                                    | 'px'
+                                                                                                                    | '%'
+                                                                                                                    | 'vw'
+                                                                                                                    | 'vh'
+                                                                                                                  )
+                                                                                                                | null;
+                                                                                                            };
+                                                                                                          };
+                                                                                                          tp?: {
+                                                                                                            textAlign?:
+                                                                                                              | (
+                                                                                                                  | 'left'
+                                                                                                                  | 'center'
+                                                                                                                  | 'right'
+                                                                                                                  | 'justify'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            fontWeight?:
+                                                                                                              | (
+                                                                                                                  | '300'
+                                                                                                                  | '400'
+                                                                                                                  | '500'
+                                                                                                                  | '600'
+                                                                                                                  | '700'
+                                                                                                                  | '800'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            fontSize?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            lineHeight?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            color?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            textTransform?:
+                                                                                                              | (
+                                                                                                                  | 'none'
+                                                                                                                  | 'capitalize'
+                                                                                                                  | 'uppercase'
+                                                                                                                  | 'lowercase'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                        };
+                                                                                                        id?:
+                                                                                                          string | null;
+                                                                                                        blockName?:
+                                                                                                          string | null;
+                                                                                                        blockType: 'text_block';
+                                                                                                      }
+                                                                                                    | {
+                                                                                                        content: {
+                                                                                                          image:
+                                                                                                            | number
+                                                                                                            | Media;
+                                                                                                          altText?:
+                                                                                                            | string
+                                                                                                            | null;
+                                                                                                        };
+                                                                                                        style?: {
+                                                                                                          space?: {
+                                                                                                            mt?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            mb?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            ml?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            mr?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pt?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pb?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pl?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pr?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                          size?: {
+                                                                                                            width?: {
+                                                                                                              val?:
+                                                                                                                | number
+                                                                                                                | null;
+                                                                                                              unit?:
+                                                                                                                | (
+                                                                                                                    | 'px'
+                                                                                                                    | '%'
+                                                                                                                    | 'vw'
+                                                                                                                    | 'vh'
+                                                                                                                  )
+                                                                                                                | null;
+                                                                                                            };
+                                                                                                            height?: {
+                                                                                                              val?:
+                                                                                                                | number
+                                                                                                                | null;
+                                                                                                              unit?:
+                                                                                                                | (
+                                                                                                                    | 'px'
+                                                                                                                    | '%'
+                                                                                                                    | 'vw'
+                                                                                                                    | 'vh'
+                                                                                                                  )
+                                                                                                                | null;
+                                                                                                            };
+                                                                                                          };
+                                                                                                          pos?: {
+                                                                                                            position?:
+                                                                                                              | (
+                                                                                                                  | 'static'
+                                                                                                                  | 'relative'
+                                                                                                                  | 'absolute'
+                                                                                                                  | 'fixed'
+                                                                                                                  | 'sticky'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            top?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            bottom?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            left?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            right?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            'z-index'?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                          bg?: {
+                                                                                                            bg?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            bgImage?:
+                                                                                                              | (
+                                                                                                                  | number
+                                                                                                                  | null
+                                                                                                                )
+                                                                                                              | Media;
+                                                                                                            bgSize?:
+                                                                                                              | (
+                                                                                                                  | 'cover'
+                                                                                                                  | 'contain'
+                                                                                                                  | 'auto'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            bgPosition?:
+                                                                                                              | (
+                                                                                                                  | 'center'
+                                                                                                                  | 'top'
+                                                                                                                  | 'bottom'
+                                                                                                                  | 'left'
+                                                                                                                  | 'right'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            bgRepeat?:
+                                                                                                              | (
+                                                                                                                  | 'no-repeat'
+                                                                                                                  | 'repeat'
+                                                                                                                  | 'repeat-x'
+                                                                                                                  | 'repeat-y'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            overlay?:
+                                                                                                              | boolean
+                                                                                                              | null;
+                                                                                                            overlayColor?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            overlayOpacity?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                        };
+                                                                                                        id?:
+                                                                                                          string | null;
+                                                                                                        blockName?:
+                                                                                                          string | null;
+                                                                                                        blockType: 'image_block';
+                                                                                                      }
+                                                                                                    | {
+                                                                                                        content?: {
+                                                                                                          children?:
+                                                                                                            | (
+                                                                                                                | {
+                                                                                                                    content?: {
+                                                                                                                      text?:
+                                                                                                                        | string
+                                                                                                                        | null;
+                                                                                                                    };
+                                                                                                                    style?: {
+                                                                                                                      space?: {
+                                                                                                                        mt?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        mb?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        ml?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        mr?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pt?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pb?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pl?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pr?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                      };
+                                                                                                                      size?: {
+                                                                                                                        width?: {
+                                                                                                                          val?:
+                                                                                                                            | number
+                                                                                                                            | null;
+                                                                                                                          unit?:
+                                                                                                                            | (
+                                                                                                                                | 'px'
+                                                                                                                                | '%'
+                                                                                                                                | 'vw'
+                                                                                                                                | 'vh'
+                                                                                                                              )
+                                                                                                                            | null;
+                                                                                                                        };
+                                                                                                                        height?: {
+                                                                                                                          val?:
+                                                                                                                            | number
+                                                                                                                            | null;
+                                                                                                                          unit?:
+                                                                                                                            | (
+                                                                                                                                | 'px'
+                                                                                                                                | '%'
+                                                                                                                                | 'vw'
+                                                                                                                                | 'vh'
+                                                                                                                              )
+                                                                                                                            | null;
+                                                                                                                        };
+                                                                                                                      };
+                                                                                                                      tp?: {
+                                                                                                                        textAlign?:
+                                                                                                                          | (
+                                                                                                                              | 'left'
+                                                                                                                              | 'center'
+                                                                                                                              | 'right'
+                                                                                                                              | 'justify'
+                                                                                                                            )
+                                                                                                                          | null;
+                                                                                                                        fontWeight?:
+                                                                                                                          | (
+                                                                                                                              | '300'
+                                                                                                                              | '400'
+                                                                                                                              | '500'
+                                                                                                                              | '600'
+                                                                                                                              | '700'
+                                                                                                                              | '800'
+                                                                                                                            )
+                                                                                                                          | null;
+                                                                                                                        fontSize?:
+                                                                                                                          | string
+                                                                                                                          | null;
+                                                                                                                        lineHeight?:
+                                                                                                                          | string
+                                                                                                                          | null;
+                                                                                                                        color?:
+                                                                                                                          | string
+                                                                                                                          | null;
+                                                                                                                        textTransform?:
+                                                                                                                          | (
+                                                                                                                              | 'none'
+                                                                                                                              | 'capitalize'
+                                                                                                                              | 'uppercase'
+                                                                                                                              | 'lowercase'
+                                                                                                                            )
+                                                                                                                          | null;
+                                                                                                                      };
+                                                                                                                    };
+                                                                                                                    id?:
+                                                                                                                      | string
+                                                                                                                      | null;
+                                                                                                                    blockName?:
+                                                                                                                      | string
+                                                                                                                      | null;
+                                                                                                                    blockType: 'text_block';
+                                                                                                                  }
+                                                                                                                | {
+                                                                                                                    content: {
+                                                                                                                      image:
+                                                                                                                        | number
+                                                                                                                        | Media;
+                                                                                                                      altText?:
+                                                                                                                        | string
+                                                                                                                        | null;
+                                                                                                                    };
+                                                                                                                    style?: {
+                                                                                                                      space?: {
+                                                                                                                        mt?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        mb?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        ml?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        mr?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pt?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pb?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pl?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        pr?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                      };
+                                                                                                                      size?: {
+                                                                                                                        width?: {
+                                                                                                                          val?:
+                                                                                                                            | number
+                                                                                                                            | null;
+                                                                                                                          unit?:
+                                                                                                                            | (
+                                                                                                                                | 'px'
+                                                                                                                                | '%'
+                                                                                                                                | 'vw'
+                                                                                                                                | 'vh'
+                                                                                                                              )
+                                                                                                                            | null;
+                                                                                                                        };
+                                                                                                                        height?: {
+                                                                                                                          val?:
+                                                                                                                            | number
+                                                                                                                            | null;
+                                                                                                                          unit?:
+                                                                                                                            | (
+                                                                                                                                | 'px'
+                                                                                                                                | '%'
+                                                                                                                                | 'vw'
+                                                                                                                                | 'vh'
+                                                                                                                              )
+                                                                                                                            | null;
+                                                                                                                        };
+                                                                                                                      };
+                                                                                                                      pos?: {
+                                                                                                                        position?:
+                                                                                                                          | (
+                                                                                                                              | 'static'
+                                                                                                                              | 'relative'
+                                                                                                                              | 'absolute'
+                                                                                                                              | 'fixed'
+                                                                                                                              | 'sticky'
+                                                                                                                            )
+                                                                                                                          | null;
+                                                                                                                        top?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        bottom?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        left?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        right?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                        'z-index'?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                      };
+                                                                                                                      bg?: {
+                                                                                                                        bg?:
+                                                                                                                          | string
+                                                                                                                          | null;
+                                                                                                                        bgImage?:
+                                                                                                                          | (
+                                                                                                                              | number
+                                                                                                                              | null
+                                                                                                                            )
+                                                                                                                          | Media;
+                                                                                                                        bgSize?:
+                                                                                                                          | (
+                                                                                                                              | 'cover'
+                                                                                                                              | 'contain'
+                                                                                                                              | 'auto'
+                                                                                                                            )
+                                                                                                                          | null;
+                                                                                                                        bgPosition?:
+                                                                                                                          | (
+                                                                                                                              | 'center'
+                                                                                                                              | 'top'
+                                                                                                                              | 'bottom'
+                                                                                                                              | 'left'
+                                                                                                                              | 'right'
+                                                                                                                            )
+                                                                                                                          | null;
+                                                                                                                        bgRepeat?:
+                                                                                                                          | (
+                                                                                                                              | 'no-repeat'
+                                                                                                                              | 'repeat'
+                                                                                                                              | 'repeat-x'
+                                                                                                                              | 'repeat-y'
+                                                                                                                            )
+                                                                                                                          | null;
+                                                                                                                        overlay?:
+                                                                                                                          | boolean
+                                                                                                                          | null;
+                                                                                                                        overlayColor?:
+                                                                                                                          | string
+                                                                                                                          | null;
+                                                                                                                        overlayOpacity?:
+                                                                                                                          | number
+                                                                                                                          | null;
+                                                                                                                      };
+                                                                                                                    };
+                                                                                                                    id?:
+                                                                                                                      | string
+                                                                                                                      | null;
+                                                                                                                    blockName?:
+                                                                                                                      | string
+                                                                                                                      | null;
+                                                                                                                    blockType: 'image_block';
+                                                                                                                  }
+                                                                                                              )[]
+                                                                                                            | null;
+                                                                                                        };
+                                                                                                        style?: {
+                                                                                                          layout?: {
+                                                                                                            display?:
+                                                                                                              | (
+                                                                                                                  | 'flex'
+                                                                                                                  | 'block'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            fd?:
+                                                                                                              | (
+                                                                                                                  | 'row'
+                                                                                                                  | 'column'
+                                                                                                                  | 'row-reverse'
+                                                                                                                  | 'column-reverse'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            jc?:
+                                                                                                              | (
+                                                                                                                  | 'flex-start'
+                                                                                                                  | 'flex-end'
+                                                                                                                  | 'center'
+                                                                                                                  | 'space-between'
+                                                                                                                  | 'space-around'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            ai?:
+                                                                                                              | (
+                                                                                                                  | 'flex-start'
+                                                                                                                  | 'flex-end'
+                                                                                                                  | 'center'
+                                                                                                                  | 'stretch'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            cgap?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            rgap?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            wrap?:
+                                                                                                              | (
+                                                                                                                  | 'wrap'
+                                                                                                                  | 'nowrap'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                          space?: {
+                                                                                                            mt?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            mb?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            ml?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            mr?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pt?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pb?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pl?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            pr?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                          size?: {
+                                                                                                            width?: {
+                                                                                                              val?:
+                                                                                                                | number
+                                                                                                                | null;
+                                                                                                              unit?:
+                                                                                                                | (
+                                                                                                                    | 'px'
+                                                                                                                    | '%'
+                                                                                                                    | 'vw'
+                                                                                                                    | 'vh'
+                                                                                                                  )
+                                                                                                                | null;
+                                                                                                            };
+                                                                                                            height?: {
+                                                                                                              val?:
+                                                                                                                | number
+                                                                                                                | null;
+                                                                                                              unit?:
+                                                                                                                | (
+                                                                                                                    | 'px'
+                                                                                                                    | '%'
+                                                                                                                    | 'vw'
+                                                                                                                    | 'vh'
+                                                                                                                  )
+                                                                                                                | null;
+                                                                                                            };
+                                                                                                          };
+                                                                                                          pos?: {
+                                                                                                            position?:
+                                                                                                              | (
+                                                                                                                  | 'static'
+                                                                                                                  | 'relative'
+                                                                                                                  | 'absolute'
+                                                                                                                  | 'fixed'
+                                                                                                                  | 'sticky'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            top?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            bottom?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            left?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            right?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                            'z-index'?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                          tp?: {
+                                                                                                            textAlign?:
+                                                                                                              | (
+                                                                                                                  | 'left'
+                                                                                                                  | 'center'
+                                                                                                                  | 'right'
+                                                                                                                  | 'justify'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            fontWeight?:
+                                                                                                              | (
+                                                                                                                  | '300'
+                                                                                                                  | '400'
+                                                                                                                  | '500'
+                                                                                                                  | '600'
+                                                                                                                  | '700'
+                                                                                                                  | '800'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            fontSize?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            lineHeight?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            color?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            textTransform?:
+                                                                                                              | (
+                                                                                                                  | 'none'
+                                                                                                                  | 'capitalize'
+                                                                                                                  | 'uppercase'
+                                                                                                                  | 'lowercase'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                          bg?: {
+                                                                                                            bg?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            bgImage?:
+                                                                                                              | (
+                                                                                                                  | number
+                                                                                                                  | null
+                                                                                                                )
+                                                                                                              | Media;
+                                                                                                            bgSize?:
+                                                                                                              | (
+                                                                                                                  | 'cover'
+                                                                                                                  | 'contain'
+                                                                                                                  | 'auto'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            bgPosition?:
+                                                                                                              | (
+                                                                                                                  | 'center'
+                                                                                                                  | 'top'
+                                                                                                                  | 'bottom'
+                                                                                                                  | 'left'
+                                                                                                                  | 'right'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            bgRepeat?:
+                                                                                                              | (
+                                                                                                                  | 'no-repeat'
+                                                                                                                  | 'repeat'
+                                                                                                                  | 'repeat-x'
+                                                                                                                  | 'repeat-y'
+                                                                                                                )
+                                                                                                              | null;
+                                                                                                            overlay?:
+                                                                                                              | boolean
+                                                                                                              | null;
+                                                                                                            overlayColor?:
+                                                                                                              | string
+                                                                                                              | null;
+                                                                                                            overlayOpacity?:
+                                                                                                              | number
+                                                                                                              | null;
+                                                                                                          };
+                                                                                                        };
+                                                                                                        id?:
+                                                                                                          string | null;
+                                                                                                        blockName?:
+                                                                                                          string | null;
+                                                                                                        blockType: 'container_block_l8';
+                                                                                                      }
+                                                                                                  )[]
+                                                                                                | null;
+                                                                                            };
+                                                                                            style?: {
+                                                                                              layout?: {
+                                                                                                display?:
+                                                                                                  | ('flex' | 'block')
+                                                                                                  | null;
+                                                                                                fd?:
+                                                                                                  | (
+                                                                                                      | 'row'
+                                                                                                      | 'column'
+                                                                                                      | 'row-reverse'
+                                                                                                      | 'column-reverse'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                jc?:
+                                                                                                  | (
+                                                                                                      | 'flex-start'
+                                                                                                      | 'flex-end'
+                                                                                                      | 'center'
+                                                                                                      | 'space-between'
+                                                                                                      | 'space-around'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                ai?:
+                                                                                                  | (
+                                                                                                      | 'flex-start'
+                                                                                                      | 'flex-end'
+                                                                                                      | 'center'
+                                                                                                      | 'stretch'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                cgap?: number | null;
+                                                                                                rgap?: number | null;
+                                                                                                wrap?:
+                                                                                                  | ('wrap' | 'nowrap')
+                                                                                                  | null;
+                                                                                              };
+                                                                                              space?: {
+                                                                                                mt?: number | null;
+                                                                                                mb?: number | null;
+                                                                                                ml?: number | null;
+                                                                                                mr?: number | null;
+                                                                                                pt?: number | null;
+                                                                                                pb?: number | null;
+                                                                                                pl?: number | null;
+                                                                                                pr?: number | null;
+                                                                                              };
+                                                                                              size?: {
+                                                                                                width?: {
+                                                                                                  val?: number | null;
+                                                                                                  unit?:
+                                                                                                    | (
+                                                                                                        | 'px'
+                                                                                                        | '%'
+                                                                                                        | 'vw'
+                                                                                                        | 'vh'
+                                                                                                      )
+                                                                                                    | null;
+                                                                                                };
+                                                                                                height?: {
+                                                                                                  val?: number | null;
+                                                                                                  unit?:
+                                                                                                    | (
+                                                                                                        | 'px'
+                                                                                                        | '%'
+                                                                                                        | 'vw'
+                                                                                                        | 'vh'
+                                                                                                      )
+                                                                                                    | null;
+                                                                                                };
+                                                                                              };
+                                                                                              pos?: {
+                                                                                                position?:
+                                                                                                  | (
+                                                                                                      | 'static'
+                                                                                                      | 'relative'
+                                                                                                      | 'absolute'
+                                                                                                      | 'fixed'
+                                                                                                      | 'sticky'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                top?: number | null;
+                                                                                                bottom?: number | null;
+                                                                                                left?: number | null;
+                                                                                                right?: number | null;
+                                                                                                'z-index'?:
+                                                                                                  number | null;
+                                                                                              };
+                                                                                              tp?: {
+                                                                                                textAlign?:
+                                                                                                  | (
+                                                                                                      | 'left'
+                                                                                                      | 'center'
+                                                                                                      | 'right'
+                                                                                                      | 'justify'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                fontWeight?:
+                                                                                                  | (
+                                                                                                      | '300'
+                                                                                                      | '400'
+                                                                                                      | '500'
+                                                                                                      | '600'
+                                                                                                      | '700'
+                                                                                                      | '800'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                fontSize?:
+                                                                                                  string | null;
+                                                                                                lineHeight?:
+                                                                                                  string | null;
+                                                                                                color?: string | null;
+                                                                                                textTransform?:
+                                                                                                  | (
+                                                                                                      | 'none'
+                                                                                                      | 'capitalize'
+                                                                                                      | 'uppercase'
+                                                                                                      | 'lowercase'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                              };
+                                                                                              bg?: {
+                                                                                                bg?: string | null;
+                                                                                                bgImage?:
+                                                                                                  | (number | null)
+                                                                                                  | Media;
+                                                                                                bgSize?:
+                                                                                                  | (
+                                                                                                      | 'cover'
+                                                                                                      | 'contain'
+                                                                                                      | 'auto'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                bgPosition?:
+                                                                                                  | (
+                                                                                                      | 'center'
+                                                                                                      | 'top'
+                                                                                                      | 'bottom'
+                                                                                                      | 'left'
+                                                                                                      | 'right'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                bgRepeat?:
+                                                                                                  | (
+                                                                                                      | 'no-repeat'
+                                                                                                      | 'repeat'
+                                                                                                      | 'repeat-x'
+                                                                                                      | 'repeat-y'
+                                                                                                    )
+                                                                                                  | null;
+                                                                                                overlay?:
+                                                                                                  boolean | null;
+                                                                                                overlayColor?:
+                                                                                                  string | null;
+                                                                                                overlayOpacity?:
+                                                                                                  number | null;
+                                                                                              };
+                                                                                            };
+                                                                                            id?: string | null;
+                                                                                            blockName?: string | null;
+                                                                                            blockType: 'container_block_l7';
+                                                                                          }
+                                                                                      )[]
+                                                                                    | null;
+                                                                                };
+                                                                                style?: {
+                                                                                  layout?: {
+                                                                                    display?: ('flex' | 'block') | null;
+                                                                                    fd?:
+                                                                                      | (
+                                                                                          | 'row'
+                                                                                          | 'column'
+                                                                                          | 'row-reverse'
+                                                                                          | 'column-reverse'
+                                                                                        )
+                                                                                      | null;
+                                                                                    jc?:
+                                                                                      | (
+                                                                                          | 'flex-start'
+                                                                                          | 'flex-end'
+                                                                                          | 'center'
+                                                                                          | 'space-between'
+                                                                                          | 'space-around'
+                                                                                        )
+                                                                                      | null;
+                                                                                    ai?:
+                                                                                      | (
+                                                                                          | 'flex-start'
+                                                                                          | 'flex-end'
+                                                                                          | 'center'
+                                                                                          | 'stretch'
+                                                                                        )
+                                                                                      | null;
+                                                                                    cgap?: number | null;
+                                                                                    rgap?: number | null;
+                                                                                    wrap?: ('wrap' | 'nowrap') | null;
+                                                                                  };
+                                                                                  space?: {
+                                                                                    mt?: number | null;
+                                                                                    mb?: number | null;
+                                                                                    ml?: number | null;
+                                                                                    mr?: number | null;
+                                                                                    pt?: number | null;
+                                                                                    pb?: number | null;
+                                                                                    pl?: number | null;
+                                                                                    pr?: number | null;
+                                                                                  };
+                                                                                  size?: {
+                                                                                    width?: {
+                                                                                      val?: number | null;
+                                                                                      unit?:
+                                                                                        | ('px' | '%' | 'vw' | 'vh')
+                                                                                        | null;
+                                                                                    };
+                                                                                    height?: {
+                                                                                      val?: number | null;
+                                                                                      unit?:
+                                                                                        | ('px' | '%' | 'vw' | 'vh')
+                                                                                        | null;
+                                                                                    };
+                                                                                  };
+                                                                                  pos?: {
+                                                                                    position?:
+                                                                                      | (
+                                                                                          | 'static'
+                                                                                          | 'relative'
+                                                                                          | 'absolute'
+                                                                                          | 'fixed'
+                                                                                          | 'sticky'
+                                                                                        )
+                                                                                      | null;
+                                                                                    top?: number | null;
+                                                                                    bottom?: number | null;
+                                                                                    left?: number | null;
+                                                                                    right?: number | null;
+                                                                                    'z-index'?: number | null;
+                                                                                  };
+                                                                                  tp?: {
+                                                                                    textAlign?:
+                                                                                      | (
+                                                                                          | 'left'
+                                                                                          | 'center'
+                                                                                          | 'right'
+                                                                                          | 'justify'
+                                                                                        )
+                                                                                      | null;
+                                                                                    fontWeight?:
+                                                                                      | (
+                                                                                          | '300'
+                                                                                          | '400'
+                                                                                          | '500'
+                                                                                          | '600'
+                                                                                          | '700'
+                                                                                          | '800'
+                                                                                        )
+                                                                                      | null;
+                                                                                    fontSize?: string | null;
+                                                                                    lineHeight?: string | null;
+                                                                                    color?: string | null;
+                                                                                    textTransform?:
+                                                                                      | (
+                                                                                          | 'none'
+                                                                                          | 'capitalize'
+                                                                                          | 'uppercase'
+                                                                                          | 'lowercase'
+                                                                                        )
+                                                                                      | null;
+                                                                                  };
+                                                                                  bg?: {
+                                                                                    bg?: string | null;
+                                                                                    bgImage?: (number | null) | Media;
+                                                                                    bgSize?:
+                                                                                      | ('cover' | 'contain' | 'auto')
+                                                                                      | null;
+                                                                                    bgPosition?:
+                                                                                      | (
+                                                                                          | 'center'
+                                                                                          | 'top'
+                                                                                          | 'bottom'
+                                                                                          | 'left'
+                                                                                          | 'right'
+                                                                                        )
+                                                                                      | null;
+                                                                                    bgRepeat?:
+                                                                                      | (
+                                                                                          | 'no-repeat'
+                                                                                          | 'repeat'
+                                                                                          | 'repeat-x'
+                                                                                          | 'repeat-y'
+                                                                                        )
+                                                                                      | null;
+                                                                                    overlay?: boolean | null;
+                                                                                    overlayColor?: string | null;
+                                                                                    overlayOpacity?: number | null;
+                                                                                  };
+                                                                                };
+                                                                                id?: string | null;
+                                                                                blockName?: string | null;
+                                                                                blockType: 'container_block_l6';
+                                                                              }
+                                                                          )[]
+                                                                        | null;
+                                                                    };
+                                                                    style?: {
+                                                                      layout?: {
+                                                                        display?: ('flex' | 'block') | null;
+                                                                        fd?:
+                                                                          | (
+                                                                              | 'row'
+                                                                              | 'column'
+                                                                              | 'row-reverse'
+                                                                              | 'column-reverse'
+                                                                            )
+                                                                          | null;
+                                                                        jc?:
+                                                                          | (
+                                                                              | 'flex-start'
+                                                                              | 'flex-end'
+                                                                              | 'center'
+                                                                              | 'space-between'
+                                                                              | 'space-around'
+                                                                            )
+                                                                          | null;
+                                                                        ai?:
+                                                                          | (
+                                                                              | 'flex-start'
+                                                                              | 'flex-end'
+                                                                              | 'center'
+                                                                              | 'stretch'
+                                                                            )
+                                                                          | null;
+                                                                        cgap?: number | null;
+                                                                        rgap?: number | null;
+                                                                        wrap?: ('wrap' | 'nowrap') | null;
+                                                                      };
+                                                                      space?: {
+                                                                        mt?: number | null;
+                                                                        mb?: number | null;
+                                                                        ml?: number | null;
+                                                                        mr?: number | null;
+                                                                        pt?: number | null;
+                                                                        pb?: number | null;
+                                                                        pl?: number | null;
+                                                                        pr?: number | null;
+                                                                      };
+                                                                      size?: {
+                                                                        width?: {
+                                                                          val?: number | null;
+                                                                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                                        };
+                                                                        height?: {
+                                                                          val?: number | null;
+                                                                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                                        };
+                                                                      };
+                                                                      pos?: {
+                                                                        position?:
+                                                                          | (
+                                                                              | 'static'
+                                                                              | 'relative'
+                                                                              | 'absolute'
+                                                                              | 'fixed'
+                                                                              | 'sticky'
+                                                                            )
+                                                                          | null;
+                                                                        top?: number | null;
+                                                                        bottom?: number | null;
+                                                                        left?: number | null;
+                                                                        right?: number | null;
+                                                                        'z-index'?: number | null;
+                                                                      };
+                                                                      tp?: {
+                                                                        textAlign?:
+                                                                          | ('left' | 'center' | 'right' | 'justify')
+                                                                          | null;
+                                                                        fontWeight?:
+                                                                          | (
+                                                                              | '300'
+                                                                              | '400'
+                                                                              | '500'
+                                                                              | '600'
+                                                                              | '700'
+                                                                              | '800'
+                                                                            )
+                                                                          | null;
+                                                                        fontSize?: string | null;
+                                                                        lineHeight?: string | null;
+                                                                        color?: string | null;
+                                                                        textTransform?:
+                                                                          | (
+                                                                              | 'none'
+                                                                              | 'capitalize'
+                                                                              | 'uppercase'
+                                                                              | 'lowercase'
+                                                                            )
+                                                                          | null;
+                                                                      };
+                                                                      bg?: {
+                                                                        bg?: string | null;
+                                                                        bgImage?: (number | null) | Media;
+                                                                        bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                                                        bgPosition?:
+                                                                          | (
+                                                                              | 'center'
+                                                                              | 'top'
+                                                                              | 'bottom'
+                                                                              | 'left'
+                                                                              | 'right'
+                                                                            )
+                                                                          | null;
+                                                                        bgRepeat?:
+                                                                          | (
+                                                                              | 'no-repeat'
+                                                                              | 'repeat'
+                                                                              | 'repeat-x'
+                                                                              | 'repeat-y'
+                                                                            )
+                                                                          | null;
+                                                                        overlay?: boolean | null;
+                                                                        overlayColor?: string | null;
+                                                                        overlayOpacity?: number | null;
+                                                                      };
+                                                                    };
+                                                                    id?: string | null;
+                                                                    blockName?: string | null;
+                                                                    blockType: 'container_block_l5';
+                                                                  }
+                                                              )[]
+                                                            | null;
+                                                        };
+                                                        style?: {
+                                                          layout?: {
+                                                            display?: ('flex' | 'block') | null;
+                                                            fd?:
+                                                              | ('row' | 'column' | 'row-reverse' | 'column-reverse')
+                                                              | null;
+                                                            jc?:
+                                                              | (
+                                                                  | 'flex-start'
+                                                                  | 'flex-end'
+                                                                  | 'center'
+                                                                  | 'space-between'
+                                                                  | 'space-around'
+                                                                )
+                                                              | null;
+                                                            ai?:
+                                                              ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                                                            cgap?: number | null;
+                                                            rgap?: number | null;
+                                                            wrap?: ('wrap' | 'nowrap') | null;
+                                                          };
+                                                          space?: {
+                                                            mt?: number | null;
+                                                            mb?: number | null;
+                                                            ml?: number | null;
+                                                            mr?: number | null;
+                                                            pt?: number | null;
+                                                            pb?: number | null;
+                                                            pl?: number | null;
+                                                            pr?: number | null;
+                                                          };
+                                                          size?: {
+                                                            width?: {
+                                                              val?: number | null;
+                                                              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                            };
+                                                            height?: {
+                                                              val?: number | null;
+                                                              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                            };
+                                                          };
+                                                          pos?: {
+                                                            position?:
+                                                              | (
+                                                                  | 'static'
+                                                                  | 'relative'
+                                                                  | 'absolute'
+                                                                  | 'fixed'
+                                                                  | 'sticky'
+                                                                )
+                                                              | null;
+                                                            top?: number | null;
+                                                            bottom?: number | null;
+                                                            left?: number | null;
+                                                            right?: number | null;
+                                                            'z-index'?: number | null;
+                                                          };
+                                                          tp?: {
+                                                            textAlign?:
+                                                              ('left' | 'center' | 'right' | 'justify') | null;
+                                                            fontWeight?:
+                                                              ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                                                            fontSize?: string | null;
+                                                            lineHeight?: string | null;
+                                                            color?: string | null;
+                                                            textTransform?:
+                                                              | ('none' | 'capitalize' | 'uppercase' | 'lowercase')
+                                                              | null;
+                                                          };
+                                                          bg?: {
+                                                            bg?: string | null;
+                                                            bgImage?: (number | null) | Media;
+                                                            bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                                            bgPosition?:
+                                                              ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                                                            bgRepeat?:
+                                                              ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                                                            overlay?: boolean | null;
+                                                            overlayColor?: string | null;
+                                                            overlayOpacity?: number | null;
+                                                          };
+                                                        };
+                                                        id?: string | null;
+                                                        blockName?: string | null;
+                                                        blockType: 'container_block_l4';
+                                                      }
+                                                  )[]
+                                                | null;
+                                            };
+                                            style?: {
+                                              layout?: {
+                                                display?: ('flex' | 'block') | null;
+                                                fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+                                                jc?:
+                                                  | (
+                                                      | 'flex-start'
+                                                      | 'flex-end'
+                                                      | 'center'
+                                                      | 'space-between'
+                                                      | 'space-around'
+                                                    )
+                                                  | null;
+                                                ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                                                cgap?: number | null;
+                                                rgap?: number | null;
+                                                wrap?: ('wrap' | 'nowrap') | null;
+                                              };
+                                              space?: {
+                                                mt?: number | null;
+                                                mb?: number | null;
+                                                ml?: number | null;
+                                                mr?: number | null;
+                                                pt?: number | null;
+                                                pb?: number | null;
+                                                pl?: number | null;
+                                                pr?: number | null;
+                                              };
+                                              size?: {
+                                                width?: {
+                                                  val?: number | null;
+                                                  unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                };
+                                                height?: {
+                                                  val?: number | null;
+                                                  unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                                };
+                                              };
+                                              pos?: {
+                                                position?:
+                                                  ('static' | 'relative' | 'absolute' | 'fixed' | 'sticky') | null;
+                                                top?: number | null;
+                                                bottom?: number | null;
+                                                left?: number | null;
+                                                right?: number | null;
+                                                'z-index'?: number | null;
+                                              };
+                                              tp?: {
+                                                textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+                                                fontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                                                fontSize?: string | null;
+                                                lineHeight?: string | null;
+                                                color?: string | null;
+                                                textTransform?:
+                                                  ('none' | 'capitalize' | 'uppercase' | 'lowercase') | null;
+                                              };
+                                              bg?: {
+                                                bg?: string | null;
+                                                bgImage?: (number | null) | Media;
+                                                bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                                bgPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                                                bgRepeat?: ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                                                overlay?: boolean | null;
+                                                overlayColor?: string | null;
+                                                overlayOpacity?: number | null;
+                                              };
+                                            };
+                                            id?: string | null;
+                                            blockName?: string | null;
+                                            blockType: 'container_block_l3';
+                                          }
+                                      )[]
+                                    | null;
+                                };
+                                style?: {
+                                  layout?: {
+                                    display?: ('flex' | 'block') | null;
+                                    fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+                                    jc?:
+                                      ('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around') | null;
+                                    ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                                    cgap?: number | null;
+                                    rgap?: number | null;
+                                    wrap?: ('wrap' | 'nowrap') | null;
+                                  };
+                                  space?: {
+                                    mt?: number | null;
+                                    mb?: number | null;
+                                    ml?: number | null;
+                                    mr?: number | null;
+                                    pt?: number | null;
+                                    pb?: number | null;
+                                    pl?: number | null;
+                                    pr?: number | null;
+                                  };
+                                  size?: {
+                                    width?: {
+                                      val?: number | null;
+                                      unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                    };
+                                    height?: {
+                                      val?: number | null;
+                                      unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                                    };
+                                  };
+                                  pos?: {
+                                    position?: ('static' | 'relative' | 'absolute' | 'fixed' | 'sticky') | null;
+                                    top?: number | null;
+                                    bottom?: number | null;
+                                    left?: number | null;
+                                    right?: number | null;
+                                    'z-index'?: number | null;
+                                  };
+                                  tp?: {
+                                    textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+                                    fontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                                    fontSize?: string | null;
+                                    lineHeight?: string | null;
+                                    color?: string | null;
+                                    textTransform?: ('none' | 'capitalize' | 'uppercase' | 'lowercase') | null;
+                                  };
+                                  bg?: {
+                                    bg?: string | null;
+                                    bgImage?: (number | null) | Media;
+                                    bgSize?: ('cover' | 'contain' | 'auto') | null;
+                                    bgPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                                    bgRepeat?: ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                                    overlay?: boolean | null;
+                                    overlayColor?: string | null;
+                                    overlayOpacity?: number | null;
+                                  };
+                                };
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: 'container_block_l2';
+                              }
+                          )[]
+                        | null;
+                    };
+                    style?: {
+                      layout?: {
+                        display?: ('flex' | 'block') | null;
+                        fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+                        jc?: ('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around') | null;
+                        ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                        cgap?: number | null;
+                        rgap?: number | null;
+                        wrap?: ('wrap' | 'nowrap') | null;
+                      };
+                      space?: {
+                        mt?: number | null;
+                        mb?: number | null;
+                        ml?: number | null;
+                        mr?: number | null;
+                        pt?: number | null;
+                        pb?: number | null;
+                        pl?: number | null;
+                        pr?: number | null;
+                      };
+                      size?: {
+                        width?: {
+                          val?: number | null;
+                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                        };
+                        height?: {
+                          val?: number | null;
+                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                        };
+                      };
+                      pos?: {
+                        position?: ('static' | 'relative' | 'absolute' | 'fixed' | 'sticky') | null;
+                        top?: number | null;
+                        bottom?: number | null;
+                        left?: number | null;
+                        right?: number | null;
+                        'z-index'?: number | null;
+                      };
+                      tp?: {
+                        textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+                        fontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+                        fontSize?: string | null;
+                        lineHeight?: string | null;
+                        color?: string | null;
+                        textTransform?: ('none' | 'capitalize' | 'uppercase' | 'lowercase') | null;
+                      };
+                      bg?: {
+                        bg?: string | null;
+                        bgImage?: (number | null) | Media;
+                        bgSize?: ('cover' | 'contain' | 'auto') | null;
+                        bgPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                        bgRepeat?: ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                        overlay?: boolean | null;
+                        overlayColor?: string | null;
+                        overlayOpacity?: number | null;
+                      };
+                    };
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'container_block_l1';
+                  }
+                | {
+                    content: {
+                      image: number | Media;
+                      altText?: string | null;
+                    };
+                    style?: {
+                      space?: {
+                        mt?: number | null;
+                        mb?: number | null;
+                        ml?: number | null;
+                        mr?: number | null;
+                        pt?: number | null;
+                        pb?: number | null;
+                        pl?: number | null;
+                        pr?: number | null;
+                      };
+                      size?: {
+                        width?: {
+                          val?: number | null;
+                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                        };
+                        height?: {
+                          val?: number | null;
+                          unit?: ('px' | '%' | 'vw' | 'vh') | null;
+                        };
+                      };
+                      pos?: {
+                        position?: ('static' | 'relative' | 'absolute' | 'fixed' | 'sticky') | null;
+                        top?: number | null;
+                        bottom?: number | null;
+                        left?: number | null;
+                        right?: number | null;
+                        'z-index'?: number | null;
+                      };
+                      bg?: {
+                        bg?: string | null;
+                        bgImage?: (number | null) | Media;
+                        bgSize?: ('cover' | 'contain' | 'auto') | null;
+                        bgPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+                        bgRepeat?: ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+                        overlay?: boolean | null;
+                        overlayColor?: string | null;
+                        overlayOpacity?: number | null;
+                      };
+                    };
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'image_block';
+                  }
+              )[]
+            | null;
+        };
+        style?: {
+          layout?: {
+            display?: ('flex' | 'block') | null;
+            fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+            jc?: ('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around') | null;
+            ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+            cgap?: number | null;
+            rgap?: number | null;
+            wrap?: ('wrap' | 'nowrap') | null;
+          };
+          space?: {
+            mt?: number | null;
+            mb?: number | null;
+            ml?: number | null;
+            mr?: number | null;
+            pt?: number | null;
+            pb?: number | null;
+            pl?: number | null;
+            pr?: number | null;
+          };
+          size?: {
+            width?: {
+              val?: number | null;
+              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+            };
+            height?: {
+              val?: number | null;
+              unit?: ('px' | '%' | 'vw' | 'vh') | null;
+            };
+          };
+          pos?: {
+            position?: ('static' | 'relative' | 'absolute' | 'fixed' | 'sticky') | null;
+            top?: number | null;
+            bottom?: number | null;
+            left?: number | null;
+            right?: number | null;
+            'z-index'?: number | null;
+          };
+          tp?: {
+            textAlign?: ('left' | 'center' | 'right' | 'justify') | null;
+            fontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+            fontSize?: string | null;
+            lineHeight?: string | null;
+            color?: string | null;
+            textTransform?: ('none' | 'capitalize' | 'uppercase' | 'lowercase') | null;
+          };
+          bg?: {
+            bg?: string | null;
+            bgImage?: (number | null) | Media;
+            bgSize?: ('cover' | 'contain' | 'auto') | null;
+            bgPosition?: ('center' | 'top' | 'bottom' | 'left' | 'right') | null;
+            bgRepeat?: ('no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y') | null;
+            overlay?: boolean | null;
+            overlayColor?: string | null;
+            overlayOpacity?: number | null;
+          };
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test".
+ */
+export interface Test {
+  id: number;
+  layout?:
+    | {
+        cssClasses?: string | null;
+        subFields?:
+          | (
+              | {
+                  cssClasses?: string | null;
+                  subFields?:
+                    | (
+                        | {
+                            cssClasses?: string | null;
+                            subFields?:
+                              | (
+                                  | {
+                                      cssClasses?: string | null;
+                                      subFields?:
+                                        | (
+                                            | {
+                                                cssClasses?: string | null;
+                                                subFields?:
+                                                  | (
+                                                      | {
+                                                          cssClasses?: string | null;
+                                                          subFields?:
+                                                            | (
+                                                                | {
+                                                                    content: string;
+                                                                    color?: string | null;
+                                                                    id?: string | null;
+                                                                    blockName?: string | null;
+                                                                    blockType: 'text_widget';
+                                                                  }
+                                                                | {
+                                                                    image: number | Media;
+                                                                    altText?: string | null;
+                                                                    id?: string | null;
+                                                                    blockName?: string | null;
+                                                                    blockType: 'image_widget';
+                                                                  }
+                                                              )[]
+                                                            | null;
+                                                          layout?: {
+                                                            display?: ('flex' | 'block') | null;
+                                                            fd?:
+                                                              | ('row' | 'column' | 'row-reverse' | 'column-reverse')
+                                                              | null;
+                                                            jc?:
+                                                              | (
+                                                                  | 'flex-start'
+                                                                  | 'flex-end'
+                                                                  | 'center'
+                                                                  | 'space-between'
+                                                                  | 'space-around'
+                                                                )
+                                                              | null;
+                                                            ai?:
+                                                              ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                                                            cgap?: number | null;
+                                                            rgap?: number | null;
+                                                            wrap?: ('wrap' | 'nowrap') | null;
+                                                          };
+                                                          spacing?: {
+                                                            mt?: number | null;
+                                                            mb?: number | null;
+                                                            ml?: number | null;
+                                                            mr?: number | null;
+                                                            pt?: number | null;
+                                                            pb?: number | null;
+                                                            pl?: number | null;
+                                                            pr?: number | null;
+                                                          };
+                                                          id?: string | null;
+                                                          blockName?: string | null;
+                                                          blockType: 'container_level_6';
+                                                        }
+                                                      | {
+                                                          content: string;
+                                                          color?: string | null;
+                                                          id?: string | null;
+                                                          blockName?: string | null;
+                                                          blockType: 'text_widget';
+                                                        }
+                                                      | {
+                                                          image: number | Media;
+                                                          altText?: string | null;
+                                                          id?: string | null;
+                                                          blockName?: string | null;
+                                                          blockType: 'image_widget';
+                                                        }
+                                                    )[]
+                                                  | null;
+                                                layout?: {
+                                                  display?: ('flex' | 'block') | null;
+                                                  fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+                                                  jc?:
+                                                    | (
+                                                        | 'flex-start'
+                                                        | 'flex-end'
+                                                        | 'center'
+                                                        | 'space-between'
+                                                        | 'space-around'
+                                                      )
+                                                    | null;
+                                                  ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                                                  cgap?: number | null;
+                                                  rgap?: number | null;
+                                                  wrap?: ('wrap' | 'nowrap') | null;
+                                                };
+                                                spacing?: {
+                                                  mt?: number | null;
+                                                  mb?: number | null;
+                                                  ml?: number | null;
+                                                  mr?: number | null;
+                                                  pt?: number | null;
+                                                  pb?: number | null;
+                                                  pl?: number | null;
+                                                  pr?: number | null;
+                                                };
+                                                id?: string | null;
+                                                blockName?: string | null;
+                                                blockType: 'container_level_5';
+                                              }
+                                            | {
+                                                content: string;
+                                                color?: string | null;
+                                                id?: string | null;
+                                                blockName?: string | null;
+                                                blockType: 'text_widget';
+                                              }
+                                            | {
+                                                image: number | Media;
+                                                altText?: string | null;
+                                                id?: string | null;
+                                                blockName?: string | null;
+                                                blockType: 'image_widget';
+                                              }
+                                          )[]
+                                        | null;
+                                      layout?: {
+                                        display?: ('flex' | 'block') | null;
+                                        fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+                                        jc?:
+                                          | ('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around')
+                                          | null;
+                                        ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                                        cgap?: number | null;
+                                        rgap?: number | null;
+                                        wrap?: ('wrap' | 'nowrap') | null;
+                                      };
+                                      spacing?: {
+                                        mt?: number | null;
+                                        mb?: number | null;
+                                        ml?: number | null;
+                                        mr?: number | null;
+                                        pt?: number | null;
+                                        pb?: number | null;
+                                        pl?: number | null;
+                                        pr?: number | null;
+                                      };
+                                      id?: string | null;
+                                      blockName?: string | null;
+                                      blockType: 'container_level_4';
+                                    }
+                                  | {
+                                      content: string;
+                                      color?: string | null;
+                                      id?: string | null;
+                                      blockName?: string | null;
+                                      blockType: 'text_widget';
+                                    }
+                                  | {
+                                      image: number | Media;
+                                      altText?: string | null;
+                                      id?: string | null;
+                                      blockName?: string | null;
+                                      blockType: 'image_widget';
+                                    }
+                                )[]
+                              | null;
+                            layout?: {
+                              display?: ('flex' | 'block') | null;
+                              fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+                              jc?: ('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around') | null;
+                              ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                              cgap?: number | null;
+                              rgap?: number | null;
+                              wrap?: ('wrap' | 'nowrap') | null;
+                            };
+                            spacing?: {
+                              mt?: number | null;
+                              mb?: number | null;
+                              ml?: number | null;
+                              mr?: number | null;
+                              pt?: number | null;
+                              pb?: number | null;
+                              pl?: number | null;
+                              pr?: number | null;
+                            };
+                            id?: string | null;
+                            blockName?: string | null;
+                            blockType: 'container_level_3';
+                          }
+                        | {
+                            content: string;
+                            color?: string | null;
+                            id?: string | null;
+                            blockName?: string | null;
+                            blockType: 'text_widget';
+                          }
+                        | {
+                            image: number | Media;
+                            altText?: string | null;
+                            id?: string | null;
+                            blockName?: string | null;
+                            blockType: 'image_widget';
+                          }
+                      )[]
+                    | null;
+                  layout?: {
+                    display?: ('flex' | 'block') | null;
+                    fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+                    jc?: ('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around') | null;
+                    ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+                    cgap?: number | null;
+                    rgap?: number | null;
+                    wrap?: ('wrap' | 'nowrap') | null;
+                  };
+                  spacing?: {
+                    mt?: number | null;
+                    mb?: number | null;
+                    ml?: number | null;
+                    mr?: number | null;
+                    pt?: number | null;
+                    pb?: number | null;
+                    pl?: number | null;
+                    pr?: number | null;
+                  };
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'container_level_2';
+                }
+              | {
+                  content: string;
+                  color?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'text_widget';
+                }
+              | {
+                  image: number | Media;
+                  altText?: string | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'image_widget';
+                }
+            )[]
+          | null;
+        layout?: {
+          display?: ('flex' | 'block') | null;
+          fd?: ('row' | 'column' | 'row-reverse' | 'column-reverse') | null;
+          jc?: ('flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around') | null;
+          ai?: ('flex-start' | 'flex-end' | 'center' | 'stretch') | null;
+          cgap?: number | null;
+          rgap?: number | null;
+          wrap?: ('wrap' | 'nowrap') | null;
+        };
+        spacing?: {
+          mt?: number | null;
+          mb?: number | null;
+          ml?: number | null;
+          mr?: number | null;
+          pt?: number | null;
+          pb?: number | null;
+          pl?: number | null;
+          pr?: number | null;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'container_level_1';
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * API keys control which collections, resources, tools, and prompts MCP clients can access
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys".
+ */
+export interface PayloadMcpApiKey {
+  id: number;
+  /**
+   * The user that the API key is associated with.
+   */
+  user: number | User;
+  /**
+   * A useful label for the API key.
+   */
+  label?: string | null;
+  /**
+   * The purpose of the API key.
+   */
+  description?: string | null;
+  page?: {
+    /**
+     * Allow clients to find page.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create page.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update page.
+     */
+    update?: boolean | null;
+  };
+  media?: {
+    /**
+     * Allow clients to find media.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create media.
+     */
+    create?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  collection: 'payload-mcp-api-keys';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,21 +2908,38 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'page';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'test';
+        value: number | Test;
+      } | null)
+    | ({
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -206,11 +2948,16 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  id: number;
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'payload-mcp-api-keys';
+        value: number | PayloadMcpApiKey;
+      };
   key?: string | null;
   value?:
     | {
@@ -229,7 +2976,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -274,6 +3021,2227 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page_select".
+ */
+export interface PageSelect<T extends boolean = true> {
+  title?: T;
+  Sections?:
+    | T
+    | {
+        content?:
+          | T
+          | {
+              widgets?:
+                | T
+                | {
+                    text_block?:
+                      | T
+                      | {
+                          content?:
+                            | T
+                            | {
+                                text?: T;
+                              };
+                          style?:
+                            | T
+                            | {
+                                space?:
+                                  | T
+                                  | {
+                                      mt?: T;
+                                      mb?: T;
+                                      ml?: T;
+                                      mr?: T;
+                                      pt?: T;
+                                      pb?: T;
+                                      pl?: T;
+                                      pr?: T;
+                                    };
+                                size?:
+                                  | T
+                                  | {
+                                      width?:
+                                        | T
+                                        | {
+                                            val?: T;
+                                            unit?: T;
+                                          };
+                                      height?:
+                                        | T
+                                        | {
+                                            val?: T;
+                                            unit?: T;
+                                          };
+                                    };
+                                tp?:
+                                  | T
+                                  | {
+                                      textAlign?: T;
+                                      fontWeight?: T;
+                                      fontSize?: T;
+                                      lineHeight?: T;
+                                      color?: T;
+                                      textTransform?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    container_block_l1?:
+                      | T
+                      | {
+                          content?:
+                            | T
+                            | {
+                                children?:
+                                  | T
+                                  | {
+                                      text_block?:
+                                        | T
+                                        | {
+                                            content?:
+                                              | T
+                                              | {
+                                                  text?: T;
+                                                };
+                                            style?:
+                                              | T
+                                              | {
+                                                  space?:
+                                                    | T
+                                                    | {
+                                                        mt?: T;
+                                                        mb?: T;
+                                                        ml?: T;
+                                                        mr?: T;
+                                                        pt?: T;
+                                                        pb?: T;
+                                                        pl?: T;
+                                                        pr?: T;
+                                                      };
+                                                  size?:
+                                                    | T
+                                                    | {
+                                                        width?:
+                                                          | T
+                                                          | {
+                                                              val?: T;
+                                                              unit?: T;
+                                                            };
+                                                        height?:
+                                                          | T
+                                                          | {
+                                                              val?: T;
+                                                              unit?: T;
+                                                            };
+                                                      };
+                                                  tp?:
+                                                    | T
+                                                    | {
+                                                        textAlign?: T;
+                                                        fontWeight?: T;
+                                                        fontSize?: T;
+                                                        lineHeight?: T;
+                                                        color?: T;
+                                                        textTransform?: T;
+                                                      };
+                                                };
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      image_block?:
+                                        | T
+                                        | {
+                                            content?:
+                                              | T
+                                              | {
+                                                  image?: T;
+                                                  altText?: T;
+                                                };
+                                            style?:
+                                              | T
+                                              | {
+                                                  space?:
+                                                    | T
+                                                    | {
+                                                        mt?: T;
+                                                        mb?: T;
+                                                        ml?: T;
+                                                        mr?: T;
+                                                        pt?: T;
+                                                        pb?: T;
+                                                        pl?: T;
+                                                        pr?: T;
+                                                      };
+                                                  size?:
+                                                    | T
+                                                    | {
+                                                        width?:
+                                                          | T
+                                                          | {
+                                                              val?: T;
+                                                              unit?: T;
+                                                            };
+                                                        height?:
+                                                          | T
+                                                          | {
+                                                              val?: T;
+                                                              unit?: T;
+                                                            };
+                                                      };
+                                                  pos?:
+                                                    | T
+                                                    | {
+                                                        position?: T;
+                                                        top?: T;
+                                                        bottom?: T;
+                                                        left?: T;
+                                                        right?: T;
+                                                        'z-index'?: T;
+                                                      };
+                                                  bg?:
+                                                    | T
+                                                    | {
+                                                        bg?: T;
+                                                        bgImage?: T;
+                                                        bgSize?: T;
+                                                        bgPosition?: T;
+                                                        bgRepeat?: T;
+                                                        overlay?: T;
+                                                        overlayColor?: T;
+                                                        overlayOpacity?: T;
+                                                      };
+                                                };
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      container_block_l2?:
+                                        | T
+                                        | {
+                                            content?:
+                                              | T
+                                              | {
+                                                  children?:
+                                                    | T
+                                                    | {
+                                                        text_block?:
+                                                          | T
+                                                          | {
+                                                              content?:
+                                                                | T
+                                                                | {
+                                                                    text?: T;
+                                                                  };
+                                                              style?:
+                                                                | T
+                                                                | {
+                                                                    space?:
+                                                                      | T
+                                                                      | {
+                                                                          mt?: T;
+                                                                          mb?: T;
+                                                                          ml?: T;
+                                                                          mr?: T;
+                                                                          pt?: T;
+                                                                          pb?: T;
+                                                                          pl?: T;
+                                                                          pr?: T;
+                                                                        };
+                                                                    size?:
+                                                                      | T
+                                                                      | {
+                                                                          width?:
+                                                                            | T
+                                                                            | {
+                                                                                val?: T;
+                                                                                unit?: T;
+                                                                              };
+                                                                          height?:
+                                                                            | T
+                                                                            | {
+                                                                                val?: T;
+                                                                                unit?: T;
+                                                                              };
+                                                                        };
+                                                                    tp?:
+                                                                      | T
+                                                                      | {
+                                                                          textAlign?: T;
+                                                                          fontWeight?: T;
+                                                                          fontSize?: T;
+                                                                          lineHeight?: T;
+                                                                          color?: T;
+                                                                          textTransform?: T;
+                                                                        };
+                                                                  };
+                                                              id?: T;
+                                                              blockName?: T;
+                                                            };
+                                                        image_block?:
+                                                          | T
+                                                          | {
+                                                              content?:
+                                                                | T
+                                                                | {
+                                                                    image?: T;
+                                                                    altText?: T;
+                                                                  };
+                                                              style?:
+                                                                | T
+                                                                | {
+                                                                    space?:
+                                                                      | T
+                                                                      | {
+                                                                          mt?: T;
+                                                                          mb?: T;
+                                                                          ml?: T;
+                                                                          mr?: T;
+                                                                          pt?: T;
+                                                                          pb?: T;
+                                                                          pl?: T;
+                                                                          pr?: T;
+                                                                        };
+                                                                    size?:
+                                                                      | T
+                                                                      | {
+                                                                          width?:
+                                                                            | T
+                                                                            | {
+                                                                                val?: T;
+                                                                                unit?: T;
+                                                                              };
+                                                                          height?:
+                                                                            | T
+                                                                            | {
+                                                                                val?: T;
+                                                                                unit?: T;
+                                                                              };
+                                                                        };
+                                                                    pos?:
+                                                                      | T
+                                                                      | {
+                                                                          position?: T;
+                                                                          top?: T;
+                                                                          bottom?: T;
+                                                                          left?: T;
+                                                                          right?: T;
+                                                                          'z-index'?: T;
+                                                                        };
+                                                                    bg?:
+                                                                      | T
+                                                                      | {
+                                                                          bg?: T;
+                                                                          bgImage?: T;
+                                                                          bgSize?: T;
+                                                                          bgPosition?: T;
+                                                                          bgRepeat?: T;
+                                                                          overlay?: T;
+                                                                          overlayColor?: T;
+                                                                          overlayOpacity?: T;
+                                                                        };
+                                                                  };
+                                                              id?: T;
+                                                              blockName?: T;
+                                                            };
+                                                        container_block_l3?:
+                                                          | T
+                                                          | {
+                                                              content?:
+                                                                | T
+                                                                | {
+                                                                    children?:
+                                                                      | T
+                                                                      | {
+                                                                          text_block?:
+                                                                            | T
+                                                                            | {
+                                                                                content?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      text?: T;
+                                                                                    };
+                                                                                style?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      space?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            mt?: T;
+                                                                                            mb?: T;
+                                                                                            ml?: T;
+                                                                                            mr?: T;
+                                                                                            pt?: T;
+                                                                                            pb?: T;
+                                                                                            pl?: T;
+                                                                                            pr?: T;
+                                                                                          };
+                                                                                      size?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            width?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  val?: T;
+                                                                                                  unit?: T;
+                                                                                                };
+                                                                                            height?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  val?: T;
+                                                                                                  unit?: T;
+                                                                                                };
+                                                                                          };
+                                                                                      tp?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            textAlign?: T;
+                                                                                            fontWeight?: T;
+                                                                                            fontSize?: T;
+                                                                                            lineHeight?: T;
+                                                                                            color?: T;
+                                                                                            textTransform?: T;
+                                                                                          };
+                                                                                    };
+                                                                                id?: T;
+                                                                                blockName?: T;
+                                                                              };
+                                                                          image_block?:
+                                                                            | T
+                                                                            | {
+                                                                                content?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      image?: T;
+                                                                                      altText?: T;
+                                                                                    };
+                                                                                style?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      space?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            mt?: T;
+                                                                                            mb?: T;
+                                                                                            ml?: T;
+                                                                                            mr?: T;
+                                                                                            pt?: T;
+                                                                                            pb?: T;
+                                                                                            pl?: T;
+                                                                                            pr?: T;
+                                                                                          };
+                                                                                      size?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            width?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  val?: T;
+                                                                                                  unit?: T;
+                                                                                                };
+                                                                                            height?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  val?: T;
+                                                                                                  unit?: T;
+                                                                                                };
+                                                                                          };
+                                                                                      pos?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            position?: T;
+                                                                                            top?: T;
+                                                                                            bottom?: T;
+                                                                                            left?: T;
+                                                                                            right?: T;
+                                                                                            'z-index'?: T;
+                                                                                          };
+                                                                                      bg?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            bg?: T;
+                                                                                            bgImage?: T;
+                                                                                            bgSize?: T;
+                                                                                            bgPosition?: T;
+                                                                                            bgRepeat?: T;
+                                                                                            overlay?: T;
+                                                                                            overlayColor?: T;
+                                                                                            overlayOpacity?: T;
+                                                                                          };
+                                                                                    };
+                                                                                id?: T;
+                                                                                blockName?: T;
+                                                                              };
+                                                                          container_block_l4?:
+                                                                            | T
+                                                                            | {
+                                                                                content?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      children?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            text_block?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  content?:
+                                                                                                    | T
+                                                                                                    | {
+                                                                                                        text?: T;
+                                                                                                      };
+                                                                                                  style?:
+                                                                                                    | T
+                                                                                                    | {
+                                                                                                        space?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              mt?: T;
+                                                                                                              mb?: T;
+                                                                                                              ml?: T;
+                                                                                                              mr?: T;
+                                                                                                              pt?: T;
+                                                                                                              pb?: T;
+                                                                                                              pl?: T;
+                                                                                                              pr?: T;
+                                                                                                            };
+                                                                                                        size?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              width?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    val?: T;
+                                                                                                                    unit?: T;
+                                                                                                                  };
+                                                                                                              height?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    val?: T;
+                                                                                                                    unit?: T;
+                                                                                                                  };
+                                                                                                            };
+                                                                                                        tp?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              textAlign?: T;
+                                                                                                              fontWeight?: T;
+                                                                                                              fontSize?: T;
+                                                                                                              lineHeight?: T;
+                                                                                                              color?: T;
+                                                                                                              textTransform?: T;
+                                                                                                            };
+                                                                                                      };
+                                                                                                  id?: T;
+                                                                                                  blockName?: T;
+                                                                                                };
+                                                                                            image_block?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  content?:
+                                                                                                    | T
+                                                                                                    | {
+                                                                                                        image?: T;
+                                                                                                        altText?: T;
+                                                                                                      };
+                                                                                                  style?:
+                                                                                                    | T
+                                                                                                    | {
+                                                                                                        space?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              mt?: T;
+                                                                                                              mb?: T;
+                                                                                                              ml?: T;
+                                                                                                              mr?: T;
+                                                                                                              pt?: T;
+                                                                                                              pb?: T;
+                                                                                                              pl?: T;
+                                                                                                              pr?: T;
+                                                                                                            };
+                                                                                                        size?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              width?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    val?: T;
+                                                                                                                    unit?: T;
+                                                                                                                  };
+                                                                                                              height?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    val?: T;
+                                                                                                                    unit?: T;
+                                                                                                                  };
+                                                                                                            };
+                                                                                                        pos?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              position?: T;
+                                                                                                              top?: T;
+                                                                                                              bottom?: T;
+                                                                                                              left?: T;
+                                                                                                              right?: T;
+                                                                                                              'z-index'?: T;
+                                                                                                            };
+                                                                                                        bg?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              bg?: T;
+                                                                                                              bgImage?: T;
+                                                                                                              bgSize?: T;
+                                                                                                              bgPosition?: T;
+                                                                                                              bgRepeat?: T;
+                                                                                                              overlay?: T;
+                                                                                                              overlayColor?: T;
+                                                                                                              overlayOpacity?: T;
+                                                                                                            };
+                                                                                                      };
+                                                                                                  id?: T;
+                                                                                                  blockName?: T;
+                                                                                                };
+                                                                                            container_block_l5?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  content?:
+                                                                                                    | T
+                                                                                                    | {
+                                                                                                        children?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              text_block?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    content?:
+                                                                                                                      | T
+                                                                                                                      | {
+                                                                                                                          text?: T;
+                                                                                                                        };
+                                                                                                                    style?:
+                                                                                                                      | T
+                                                                                                                      | {
+                                                                                                                          space?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                mt?: T;
+                                                                                                                                mb?: T;
+                                                                                                                                ml?: T;
+                                                                                                                                mr?: T;
+                                                                                                                                pt?: T;
+                                                                                                                                pb?: T;
+                                                                                                                                pl?: T;
+                                                                                                                                pr?: T;
+                                                                                                                              };
+                                                                                                                          size?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                width?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      val?: T;
+                                                                                                                                      unit?: T;
+                                                                                                                                    };
+                                                                                                                                height?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      val?: T;
+                                                                                                                                      unit?: T;
+                                                                                                                                    };
+                                                                                                                              };
+                                                                                                                          tp?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                textAlign?: T;
+                                                                                                                                fontWeight?: T;
+                                                                                                                                fontSize?: T;
+                                                                                                                                lineHeight?: T;
+                                                                                                                                color?: T;
+                                                                                                                                textTransform?: T;
+                                                                                                                              };
+                                                                                                                        };
+                                                                                                                    id?: T;
+                                                                                                                    blockName?: T;
+                                                                                                                  };
+                                                                                                              image_block?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    content?:
+                                                                                                                      | T
+                                                                                                                      | {
+                                                                                                                          image?: T;
+                                                                                                                          altText?: T;
+                                                                                                                        };
+                                                                                                                    style?:
+                                                                                                                      | T
+                                                                                                                      | {
+                                                                                                                          space?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                mt?: T;
+                                                                                                                                mb?: T;
+                                                                                                                                ml?: T;
+                                                                                                                                mr?: T;
+                                                                                                                                pt?: T;
+                                                                                                                                pb?: T;
+                                                                                                                                pl?: T;
+                                                                                                                                pr?: T;
+                                                                                                                              };
+                                                                                                                          size?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                width?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      val?: T;
+                                                                                                                                      unit?: T;
+                                                                                                                                    };
+                                                                                                                                height?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      val?: T;
+                                                                                                                                      unit?: T;
+                                                                                                                                    };
+                                                                                                                              };
+                                                                                                                          pos?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                position?: T;
+                                                                                                                                top?: T;
+                                                                                                                                bottom?: T;
+                                                                                                                                left?: T;
+                                                                                                                                right?: T;
+                                                                                                                                'z-index'?: T;
+                                                                                                                              };
+                                                                                                                          bg?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                bg?: T;
+                                                                                                                                bgImage?: T;
+                                                                                                                                bgSize?: T;
+                                                                                                                                bgPosition?: T;
+                                                                                                                                bgRepeat?: T;
+                                                                                                                                overlay?: T;
+                                                                                                                                overlayColor?: T;
+                                                                                                                                overlayOpacity?: T;
+                                                                                                                              };
+                                                                                                                        };
+                                                                                                                    id?: T;
+                                                                                                                    blockName?: T;
+                                                                                                                  };
+                                                                                                              container_block_l6?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    content?:
+                                                                                                                      | T
+                                                                                                                      | {
+                                                                                                                          children?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                text_block?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      content?:
+                                                                                                                                        | T
+                                                                                                                                        | {
+                                                                                                                                            text?: T;
+                                                                                                                                          };
+                                                                                                                                      style?:
+                                                                                                                                        | T
+                                                                                                                                        | {
+                                                                                                                                            space?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  mt?: T;
+                                                                                                                                                  mb?: T;
+                                                                                                                                                  ml?: T;
+                                                                                                                                                  mr?: T;
+                                                                                                                                                  pt?: T;
+                                                                                                                                                  pb?: T;
+                                                                                                                                                  pl?: T;
+                                                                                                                                                  pr?: T;
+                                                                                                                                                };
+                                                                                                                                            size?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  width?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        val?: T;
+                                                                                                                                                        unit?: T;
+                                                                                                                                                      };
+                                                                                                                                                  height?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        val?: T;
+                                                                                                                                                        unit?: T;
+                                                                                                                                                      };
+                                                                                                                                                };
+                                                                                                                                            tp?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  textAlign?: T;
+                                                                                                                                                  fontWeight?: T;
+                                                                                                                                                  fontSize?: T;
+                                                                                                                                                  lineHeight?: T;
+                                                                                                                                                  color?: T;
+                                                                                                                                                  textTransform?: T;
+                                                                                                                                                };
+                                                                                                                                          };
+                                                                                                                                      id?: T;
+                                                                                                                                      blockName?: T;
+                                                                                                                                    };
+                                                                                                                                image_block?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      content?:
+                                                                                                                                        | T
+                                                                                                                                        | {
+                                                                                                                                            image?: T;
+                                                                                                                                            altText?: T;
+                                                                                                                                          };
+                                                                                                                                      style?:
+                                                                                                                                        | T
+                                                                                                                                        | {
+                                                                                                                                            space?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  mt?: T;
+                                                                                                                                                  mb?: T;
+                                                                                                                                                  ml?: T;
+                                                                                                                                                  mr?: T;
+                                                                                                                                                  pt?: T;
+                                                                                                                                                  pb?: T;
+                                                                                                                                                  pl?: T;
+                                                                                                                                                  pr?: T;
+                                                                                                                                                };
+                                                                                                                                            size?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  width?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        val?: T;
+                                                                                                                                                        unit?: T;
+                                                                                                                                                      };
+                                                                                                                                                  height?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        val?: T;
+                                                                                                                                                        unit?: T;
+                                                                                                                                                      };
+                                                                                                                                                };
+                                                                                                                                            pos?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  position?: T;
+                                                                                                                                                  top?: T;
+                                                                                                                                                  bottom?: T;
+                                                                                                                                                  left?: T;
+                                                                                                                                                  right?: T;
+                                                                                                                                                  'z-index'?: T;
+                                                                                                                                                };
+                                                                                                                                            bg?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  bg?: T;
+                                                                                                                                                  bgImage?: T;
+                                                                                                                                                  bgSize?: T;
+                                                                                                                                                  bgPosition?: T;
+                                                                                                                                                  bgRepeat?: T;
+                                                                                                                                                  overlay?: T;
+                                                                                                                                                  overlayColor?: T;
+                                                                                                                                                  overlayOpacity?: T;
+                                                                                                                                                };
+                                                                                                                                          };
+                                                                                                                                      id?: T;
+                                                                                                                                      blockName?: T;
+                                                                                                                                    };
+                                                                                                                                container_block_l7?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      content?:
+                                                                                                                                        | T
+                                                                                                                                        | {
+                                                                                                                                            children?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  text_block?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        content?:
+                                                                                                                                                          | T
+                                                                                                                                                          | {
+                                                                                                                                                              text?: T;
+                                                                                                                                                            };
+                                                                                                                                                        style?:
+                                                                                                                                                          | T
+                                                                                                                                                          | {
+                                                                                                                                                              space?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    mt?: T;
+                                                                                                                                                                    mb?: T;
+                                                                                                                                                                    ml?: T;
+                                                                                                                                                                    mr?: T;
+                                                                                                                                                                    pt?: T;
+                                                                                                                                                                    pb?: T;
+                                                                                                                                                                    pl?: T;
+                                                                                                                                                                    pr?: T;
+                                                                                                                                                                  };
+                                                                                                                                                              size?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    width?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          val?: T;
+                                                                                                                                                                          unit?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                    height?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          val?: T;
+                                                                                                                                                                          unit?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                  };
+                                                                                                                                                              tp?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    textAlign?: T;
+                                                                                                                                                                    fontWeight?: T;
+                                                                                                                                                                    fontSize?: T;
+                                                                                                                                                                    lineHeight?: T;
+                                                                                                                                                                    color?: T;
+                                                                                                                                                                    textTransform?: T;
+                                                                                                                                                                  };
+                                                                                                                                                            };
+                                                                                                                                                        id?: T;
+                                                                                                                                                        blockName?: T;
+                                                                                                                                                      };
+                                                                                                                                                  image_block?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        content?:
+                                                                                                                                                          | T
+                                                                                                                                                          | {
+                                                                                                                                                              image?: T;
+                                                                                                                                                              altText?: T;
+                                                                                                                                                            };
+                                                                                                                                                        style?:
+                                                                                                                                                          | T
+                                                                                                                                                          | {
+                                                                                                                                                              space?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    mt?: T;
+                                                                                                                                                                    mb?: T;
+                                                                                                                                                                    ml?: T;
+                                                                                                                                                                    mr?: T;
+                                                                                                                                                                    pt?: T;
+                                                                                                                                                                    pb?: T;
+                                                                                                                                                                    pl?: T;
+                                                                                                                                                                    pr?: T;
+                                                                                                                                                                  };
+                                                                                                                                                              size?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    width?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          val?: T;
+                                                                                                                                                                          unit?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                    height?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          val?: T;
+                                                                                                                                                                          unit?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                  };
+                                                                                                                                                              pos?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    position?: T;
+                                                                                                                                                                    top?: T;
+                                                                                                                                                                    bottom?: T;
+                                                                                                                                                                    left?: T;
+                                                                                                                                                                    right?: T;
+                                                                                                                                                                    'z-index'?: T;
+                                                                                                                                                                  };
+                                                                                                                                                              bg?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    bg?: T;
+                                                                                                                                                                    bgImage?: T;
+                                                                                                                                                                    bgSize?: T;
+                                                                                                                                                                    bgPosition?: T;
+                                                                                                                                                                    bgRepeat?: T;
+                                                                                                                                                                    overlay?: T;
+                                                                                                                                                                    overlayColor?: T;
+                                                                                                                                                                    overlayOpacity?: T;
+                                                                                                                                                                  };
+                                                                                                                                                            };
+                                                                                                                                                        id?: T;
+                                                                                                                                                        blockName?: T;
+                                                                                                                                                      };
+                                                                                                                                                  container_block_l8?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        content?:
+                                                                                                                                                          | T
+                                                                                                                                                          | {
+                                                                                                                                                              children?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    text_block?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          content?:
+                                                                                                                                                                            | T
+                                                                                                                                                                            | {
+                                                                                                                                                                                text?: T;
+                                                                                                                                                                              };
+                                                                                                                                                                          style?:
+                                                                                                                                                                            | T
+                                                                                                                                                                            | {
+                                                                                                                                                                                space?:
+                                                                                                                                                                                  | T
+                                                                                                                                                                                  | {
+                                                                                                                                                                                      mt?: T;
+                                                                                                                                                                                      mb?: T;
+                                                                                                                                                                                      ml?: T;
+                                                                                                                                                                                      mr?: T;
+                                                                                                                                                                                      pt?: T;
+                                                                                                                                                                                      pb?: T;
+                                                                                                                                                                                      pl?: T;
+                                                                                                                                                                                      pr?: T;
+                                                                                                                                                                                    };
+                                                                                                                                                                                size?:
+                                                                                                                                                                                  | T
+                                                                                                                                                                                  | {
+                                                                                                                                                                                      width?:
+                                                                                                                                                                                        | T
+                                                                                                                                                                                        | {
+                                                                                                                                                                                            val?: T;
+                                                                                                                                                                                            unit?: T;
+                                                                                                                                                                                          };
+                                                                                                                                                                                      height?:
+                                                                                                                                                                                        | T
+                                                                                                                                                                                        | {
+                                                                                                                                                                                            val?: T;
+                                                                                                                                                                                            unit?: T;
+                                                                                                                                                                                          };
+                                                                                                                                                                                    };
+                                                                                                                                                                                tp?:
+                                                                                                                                                                                  | T
+                                                                                                                                                                                  | {
+                                                                                                                                                                                      textAlign?: T;
+                                                                                                                                                                                      fontWeight?: T;
+                                                                                                                                                                                      fontSize?: T;
+                                                                                                                                                                                      lineHeight?: T;
+                                                                                                                                                                                      color?: T;
+                                                                                                                                                                                      textTransform?: T;
+                                                                                                                                                                                    };
+                                                                                                                                                                              };
+                                                                                                                                                                          id?: T;
+                                                                                                                                                                          blockName?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                    image_block?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          content?:
+                                                                                                                                                                            | T
+                                                                                                                                                                            | {
+                                                                                                                                                                                image?: T;
+                                                                                                                                                                                altText?: T;
+                                                                                                                                                                              };
+                                                                                                                                                                          style?:
+                                                                                                                                                                            | T
+                                                                                                                                                                            | {
+                                                                                                                                                                                space?:
+                                                                                                                                                                                  | T
+                                                                                                                                                                                  | {
+                                                                                                                                                                                      mt?: T;
+                                                                                                                                                                                      mb?: T;
+                                                                                                                                                                                      ml?: T;
+                                                                                                                                                                                      mr?: T;
+                                                                                                                                                                                      pt?: T;
+                                                                                                                                                                                      pb?: T;
+                                                                                                                                                                                      pl?: T;
+                                                                                                                                                                                      pr?: T;
+                                                                                                                                                                                    };
+                                                                                                                                                                                size?:
+                                                                                                                                                                                  | T
+                                                                                                                                                                                  | {
+                                                                                                                                                                                      width?:
+                                                                                                                                                                                        | T
+                                                                                                                                                                                        | {
+                                                                                                                                                                                            val?: T;
+                                                                                                                                                                                            unit?: T;
+                                                                                                                                                                                          };
+                                                                                                                                                                                      height?:
+                                                                                                                                                                                        | T
+                                                                                                                                                                                        | {
+                                                                                                                                                                                            val?: T;
+                                                                                                                                                                                            unit?: T;
+                                                                                                                                                                                          };
+                                                                                                                                                                                    };
+                                                                                                                                                                                pos?:
+                                                                                                                                                                                  | T
+                                                                                                                                                                                  | {
+                                                                                                                                                                                      position?: T;
+                                                                                                                                                                                      top?: T;
+                                                                                                                                                                                      bottom?: T;
+                                                                                                                                                                                      left?: T;
+                                                                                                                                                                                      right?: T;
+                                                                                                                                                                                      'z-index'?: T;
+                                                                                                                                                                                    };
+                                                                                                                                                                                bg?:
+                                                                                                                                                                                  | T
+                                                                                                                                                                                  | {
+                                                                                                                                                                                      bg?: T;
+                                                                                                                                                                                      bgImage?: T;
+                                                                                                                                                                                      bgSize?: T;
+                                                                                                                                                                                      bgPosition?: T;
+                                                                                                                                                                                      bgRepeat?: T;
+                                                                                                                                                                                      overlay?: T;
+                                                                                                                                                                                      overlayColor?: T;
+                                                                                                                                                                                      overlayOpacity?: T;
+                                                                                                                                                                                    };
+                                                                                                                                                                              };
+                                                                                                                                                                          id?: T;
+                                                                                                                                                                          blockName?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                  };
+                                                                                                                                                            };
+                                                                                                                                                        style?:
+                                                                                                                                                          | T
+                                                                                                                                                          | {
+                                                                                                                                                              layout?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    display?: T;
+                                                                                                                                                                    fd?: T;
+                                                                                                                                                                    jc?: T;
+                                                                                                                                                                    ai?: T;
+                                                                                                                                                                    cgap?: T;
+                                                                                                                                                                    rgap?: T;
+                                                                                                                                                                    wrap?: T;
+                                                                                                                                                                  };
+                                                                                                                                                              space?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    mt?: T;
+                                                                                                                                                                    mb?: T;
+                                                                                                                                                                    ml?: T;
+                                                                                                                                                                    mr?: T;
+                                                                                                                                                                    pt?: T;
+                                                                                                                                                                    pb?: T;
+                                                                                                                                                                    pl?: T;
+                                                                                                                                                                    pr?: T;
+                                                                                                                                                                  };
+                                                                                                                                                              size?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    width?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          val?: T;
+                                                                                                                                                                          unit?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                    height?:
+                                                                                                                                                                      | T
+                                                                                                                                                                      | {
+                                                                                                                                                                          val?: T;
+                                                                                                                                                                          unit?: T;
+                                                                                                                                                                        };
+                                                                                                                                                                  };
+                                                                                                                                                              pos?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    position?: T;
+                                                                                                                                                                    top?: T;
+                                                                                                                                                                    bottom?: T;
+                                                                                                                                                                    left?: T;
+                                                                                                                                                                    right?: T;
+                                                                                                                                                                    'z-index'?: T;
+                                                                                                                                                                  };
+                                                                                                                                                              tp?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    textAlign?: T;
+                                                                                                                                                                    fontWeight?: T;
+                                                                                                                                                                    fontSize?: T;
+                                                                                                                                                                    lineHeight?: T;
+                                                                                                                                                                    color?: T;
+                                                                                                                                                                    textTransform?: T;
+                                                                                                                                                                  };
+                                                                                                                                                              bg?:
+                                                                                                                                                                | T
+                                                                                                                                                                | {
+                                                                                                                                                                    bg?: T;
+                                                                                                                                                                    bgImage?: T;
+                                                                                                                                                                    bgSize?: T;
+                                                                                                                                                                    bgPosition?: T;
+                                                                                                                                                                    bgRepeat?: T;
+                                                                                                                                                                    overlay?: T;
+                                                                                                                                                                    overlayColor?: T;
+                                                                                                                                                                    overlayOpacity?: T;
+                                                                                                                                                                  };
+                                                                                                                                                            };
+                                                                                                                                                        id?: T;
+                                                                                                                                                        blockName?: T;
+                                                                                                                                                      };
+                                                                                                                                                };
+                                                                                                                                          };
+                                                                                                                                      style?:
+                                                                                                                                        | T
+                                                                                                                                        | {
+                                                                                                                                            layout?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  display?: T;
+                                                                                                                                                  fd?: T;
+                                                                                                                                                  jc?: T;
+                                                                                                                                                  ai?: T;
+                                                                                                                                                  cgap?: T;
+                                                                                                                                                  rgap?: T;
+                                                                                                                                                  wrap?: T;
+                                                                                                                                                };
+                                                                                                                                            space?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  mt?: T;
+                                                                                                                                                  mb?: T;
+                                                                                                                                                  ml?: T;
+                                                                                                                                                  mr?: T;
+                                                                                                                                                  pt?: T;
+                                                                                                                                                  pb?: T;
+                                                                                                                                                  pl?: T;
+                                                                                                                                                  pr?: T;
+                                                                                                                                                };
+                                                                                                                                            size?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  width?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        val?: T;
+                                                                                                                                                        unit?: T;
+                                                                                                                                                      };
+                                                                                                                                                  height?:
+                                                                                                                                                    | T
+                                                                                                                                                    | {
+                                                                                                                                                        val?: T;
+                                                                                                                                                        unit?: T;
+                                                                                                                                                      };
+                                                                                                                                                };
+                                                                                                                                            pos?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  position?: T;
+                                                                                                                                                  top?: T;
+                                                                                                                                                  bottom?: T;
+                                                                                                                                                  left?: T;
+                                                                                                                                                  right?: T;
+                                                                                                                                                  'z-index'?: T;
+                                                                                                                                                };
+                                                                                                                                            tp?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  textAlign?: T;
+                                                                                                                                                  fontWeight?: T;
+                                                                                                                                                  fontSize?: T;
+                                                                                                                                                  lineHeight?: T;
+                                                                                                                                                  color?: T;
+                                                                                                                                                  textTransform?: T;
+                                                                                                                                                };
+                                                                                                                                            bg?:
+                                                                                                                                              | T
+                                                                                                                                              | {
+                                                                                                                                                  bg?: T;
+                                                                                                                                                  bgImage?: T;
+                                                                                                                                                  bgSize?: T;
+                                                                                                                                                  bgPosition?: T;
+                                                                                                                                                  bgRepeat?: T;
+                                                                                                                                                  overlay?: T;
+                                                                                                                                                  overlayColor?: T;
+                                                                                                                                                  overlayOpacity?: T;
+                                                                                                                                                };
+                                                                                                                                          };
+                                                                                                                                      id?: T;
+                                                                                                                                      blockName?: T;
+                                                                                                                                    };
+                                                                                                                              };
+                                                                                                                        };
+                                                                                                                    style?:
+                                                                                                                      | T
+                                                                                                                      | {
+                                                                                                                          layout?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                display?: T;
+                                                                                                                                fd?: T;
+                                                                                                                                jc?: T;
+                                                                                                                                ai?: T;
+                                                                                                                                cgap?: T;
+                                                                                                                                rgap?: T;
+                                                                                                                                wrap?: T;
+                                                                                                                              };
+                                                                                                                          space?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                mt?: T;
+                                                                                                                                mb?: T;
+                                                                                                                                ml?: T;
+                                                                                                                                mr?: T;
+                                                                                                                                pt?: T;
+                                                                                                                                pb?: T;
+                                                                                                                                pl?: T;
+                                                                                                                                pr?: T;
+                                                                                                                              };
+                                                                                                                          size?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                width?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      val?: T;
+                                                                                                                                      unit?: T;
+                                                                                                                                    };
+                                                                                                                                height?:
+                                                                                                                                  | T
+                                                                                                                                  | {
+                                                                                                                                      val?: T;
+                                                                                                                                      unit?: T;
+                                                                                                                                    };
+                                                                                                                              };
+                                                                                                                          pos?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                position?: T;
+                                                                                                                                top?: T;
+                                                                                                                                bottom?: T;
+                                                                                                                                left?: T;
+                                                                                                                                right?: T;
+                                                                                                                                'z-index'?: T;
+                                                                                                                              };
+                                                                                                                          tp?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                textAlign?: T;
+                                                                                                                                fontWeight?: T;
+                                                                                                                                fontSize?: T;
+                                                                                                                                lineHeight?: T;
+                                                                                                                                color?: T;
+                                                                                                                                textTransform?: T;
+                                                                                                                              };
+                                                                                                                          bg?:
+                                                                                                                            | T
+                                                                                                                            | {
+                                                                                                                                bg?: T;
+                                                                                                                                bgImage?: T;
+                                                                                                                                bgSize?: T;
+                                                                                                                                bgPosition?: T;
+                                                                                                                                bgRepeat?: T;
+                                                                                                                                overlay?: T;
+                                                                                                                                overlayColor?: T;
+                                                                                                                                overlayOpacity?: T;
+                                                                                                                              };
+                                                                                                                        };
+                                                                                                                    id?: T;
+                                                                                                                    blockName?: T;
+                                                                                                                  };
+                                                                                                            };
+                                                                                                      };
+                                                                                                  style?:
+                                                                                                    | T
+                                                                                                    | {
+                                                                                                        layout?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              display?: T;
+                                                                                                              fd?: T;
+                                                                                                              jc?: T;
+                                                                                                              ai?: T;
+                                                                                                              cgap?: T;
+                                                                                                              rgap?: T;
+                                                                                                              wrap?: T;
+                                                                                                            };
+                                                                                                        space?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              mt?: T;
+                                                                                                              mb?: T;
+                                                                                                              ml?: T;
+                                                                                                              mr?: T;
+                                                                                                              pt?: T;
+                                                                                                              pb?: T;
+                                                                                                              pl?: T;
+                                                                                                              pr?: T;
+                                                                                                            };
+                                                                                                        size?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              width?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    val?: T;
+                                                                                                                    unit?: T;
+                                                                                                                  };
+                                                                                                              height?:
+                                                                                                                | T
+                                                                                                                | {
+                                                                                                                    val?: T;
+                                                                                                                    unit?: T;
+                                                                                                                  };
+                                                                                                            };
+                                                                                                        pos?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              position?: T;
+                                                                                                              top?: T;
+                                                                                                              bottom?: T;
+                                                                                                              left?: T;
+                                                                                                              right?: T;
+                                                                                                              'z-index'?: T;
+                                                                                                            };
+                                                                                                        tp?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              textAlign?: T;
+                                                                                                              fontWeight?: T;
+                                                                                                              fontSize?: T;
+                                                                                                              lineHeight?: T;
+                                                                                                              color?: T;
+                                                                                                              textTransform?: T;
+                                                                                                            };
+                                                                                                        bg?:
+                                                                                                          | T
+                                                                                                          | {
+                                                                                                              bg?: T;
+                                                                                                              bgImage?: T;
+                                                                                                              bgSize?: T;
+                                                                                                              bgPosition?: T;
+                                                                                                              bgRepeat?: T;
+                                                                                                              overlay?: T;
+                                                                                                              overlayColor?: T;
+                                                                                                              overlayOpacity?: T;
+                                                                                                            };
+                                                                                                      };
+                                                                                                  id?: T;
+                                                                                                  blockName?: T;
+                                                                                                };
+                                                                                          };
+                                                                                    };
+                                                                                style?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      layout?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            display?: T;
+                                                                                            fd?: T;
+                                                                                            jc?: T;
+                                                                                            ai?: T;
+                                                                                            cgap?: T;
+                                                                                            rgap?: T;
+                                                                                            wrap?: T;
+                                                                                          };
+                                                                                      space?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            mt?: T;
+                                                                                            mb?: T;
+                                                                                            ml?: T;
+                                                                                            mr?: T;
+                                                                                            pt?: T;
+                                                                                            pb?: T;
+                                                                                            pl?: T;
+                                                                                            pr?: T;
+                                                                                          };
+                                                                                      size?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            width?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  val?: T;
+                                                                                                  unit?: T;
+                                                                                                };
+                                                                                            height?:
+                                                                                              | T
+                                                                                              | {
+                                                                                                  val?: T;
+                                                                                                  unit?: T;
+                                                                                                };
+                                                                                          };
+                                                                                      pos?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            position?: T;
+                                                                                            top?: T;
+                                                                                            bottom?: T;
+                                                                                            left?: T;
+                                                                                            right?: T;
+                                                                                            'z-index'?: T;
+                                                                                          };
+                                                                                      tp?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            textAlign?: T;
+                                                                                            fontWeight?: T;
+                                                                                            fontSize?: T;
+                                                                                            lineHeight?: T;
+                                                                                            color?: T;
+                                                                                            textTransform?: T;
+                                                                                          };
+                                                                                      bg?:
+                                                                                        | T
+                                                                                        | {
+                                                                                            bg?: T;
+                                                                                            bgImage?: T;
+                                                                                            bgSize?: T;
+                                                                                            bgPosition?: T;
+                                                                                            bgRepeat?: T;
+                                                                                            overlay?: T;
+                                                                                            overlayColor?: T;
+                                                                                            overlayOpacity?: T;
+                                                                                          };
+                                                                                    };
+                                                                                id?: T;
+                                                                                blockName?: T;
+                                                                              };
+                                                                        };
+                                                                  };
+                                                              style?:
+                                                                | T
+                                                                | {
+                                                                    layout?:
+                                                                      | T
+                                                                      | {
+                                                                          display?: T;
+                                                                          fd?: T;
+                                                                          jc?: T;
+                                                                          ai?: T;
+                                                                          cgap?: T;
+                                                                          rgap?: T;
+                                                                          wrap?: T;
+                                                                        };
+                                                                    space?:
+                                                                      | T
+                                                                      | {
+                                                                          mt?: T;
+                                                                          mb?: T;
+                                                                          ml?: T;
+                                                                          mr?: T;
+                                                                          pt?: T;
+                                                                          pb?: T;
+                                                                          pl?: T;
+                                                                          pr?: T;
+                                                                        };
+                                                                    size?:
+                                                                      | T
+                                                                      | {
+                                                                          width?:
+                                                                            | T
+                                                                            | {
+                                                                                val?: T;
+                                                                                unit?: T;
+                                                                              };
+                                                                          height?:
+                                                                            | T
+                                                                            | {
+                                                                                val?: T;
+                                                                                unit?: T;
+                                                                              };
+                                                                        };
+                                                                    pos?:
+                                                                      | T
+                                                                      | {
+                                                                          position?: T;
+                                                                          top?: T;
+                                                                          bottom?: T;
+                                                                          left?: T;
+                                                                          right?: T;
+                                                                          'z-index'?: T;
+                                                                        };
+                                                                    tp?:
+                                                                      | T
+                                                                      | {
+                                                                          textAlign?: T;
+                                                                          fontWeight?: T;
+                                                                          fontSize?: T;
+                                                                          lineHeight?: T;
+                                                                          color?: T;
+                                                                          textTransform?: T;
+                                                                        };
+                                                                    bg?:
+                                                                      | T
+                                                                      | {
+                                                                          bg?: T;
+                                                                          bgImage?: T;
+                                                                          bgSize?: T;
+                                                                          bgPosition?: T;
+                                                                          bgRepeat?: T;
+                                                                          overlay?: T;
+                                                                          overlayColor?: T;
+                                                                          overlayOpacity?: T;
+                                                                        };
+                                                                  };
+                                                              id?: T;
+                                                              blockName?: T;
+                                                            };
+                                                      };
+                                                };
+                                            style?:
+                                              | T
+                                              | {
+                                                  layout?:
+                                                    | T
+                                                    | {
+                                                        display?: T;
+                                                        fd?: T;
+                                                        jc?: T;
+                                                        ai?: T;
+                                                        cgap?: T;
+                                                        rgap?: T;
+                                                        wrap?: T;
+                                                      };
+                                                  space?:
+                                                    | T
+                                                    | {
+                                                        mt?: T;
+                                                        mb?: T;
+                                                        ml?: T;
+                                                        mr?: T;
+                                                        pt?: T;
+                                                        pb?: T;
+                                                        pl?: T;
+                                                        pr?: T;
+                                                      };
+                                                  size?:
+                                                    | T
+                                                    | {
+                                                        width?:
+                                                          | T
+                                                          | {
+                                                              val?: T;
+                                                              unit?: T;
+                                                            };
+                                                        height?:
+                                                          | T
+                                                          | {
+                                                              val?: T;
+                                                              unit?: T;
+                                                            };
+                                                      };
+                                                  pos?:
+                                                    | T
+                                                    | {
+                                                        position?: T;
+                                                        top?: T;
+                                                        bottom?: T;
+                                                        left?: T;
+                                                        right?: T;
+                                                        'z-index'?: T;
+                                                      };
+                                                  tp?:
+                                                    | T
+                                                    | {
+                                                        textAlign?: T;
+                                                        fontWeight?: T;
+                                                        fontSize?: T;
+                                                        lineHeight?: T;
+                                                        color?: T;
+                                                        textTransform?: T;
+                                                      };
+                                                  bg?:
+                                                    | T
+                                                    | {
+                                                        bg?: T;
+                                                        bgImage?: T;
+                                                        bgSize?: T;
+                                                        bgPosition?: T;
+                                                        bgRepeat?: T;
+                                                        overlay?: T;
+                                                        overlayColor?: T;
+                                                        overlayOpacity?: T;
+                                                      };
+                                                };
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                    };
+                              };
+                          style?:
+                            | T
+                            | {
+                                layout?:
+                                  | T
+                                  | {
+                                      display?: T;
+                                      fd?: T;
+                                      jc?: T;
+                                      ai?: T;
+                                      cgap?: T;
+                                      rgap?: T;
+                                      wrap?: T;
+                                    };
+                                space?:
+                                  | T
+                                  | {
+                                      mt?: T;
+                                      mb?: T;
+                                      ml?: T;
+                                      mr?: T;
+                                      pt?: T;
+                                      pb?: T;
+                                      pl?: T;
+                                      pr?: T;
+                                    };
+                                size?:
+                                  | T
+                                  | {
+                                      width?:
+                                        | T
+                                        | {
+                                            val?: T;
+                                            unit?: T;
+                                          };
+                                      height?:
+                                        | T
+                                        | {
+                                            val?: T;
+                                            unit?: T;
+                                          };
+                                    };
+                                pos?:
+                                  | T
+                                  | {
+                                      position?: T;
+                                      top?: T;
+                                      bottom?: T;
+                                      left?: T;
+                                      right?: T;
+                                      'z-index'?: T;
+                                    };
+                                tp?:
+                                  | T
+                                  | {
+                                      textAlign?: T;
+                                      fontWeight?: T;
+                                      fontSize?: T;
+                                      lineHeight?: T;
+                                      color?: T;
+                                      textTransform?: T;
+                                    };
+                                bg?:
+                                  | T
+                                  | {
+                                      bg?: T;
+                                      bgImage?: T;
+                                      bgSize?: T;
+                                      bgPosition?: T;
+                                      bgRepeat?: T;
+                                      overlay?: T;
+                                      overlayColor?: T;
+                                      overlayOpacity?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    image_block?:
+                      | T
+                      | {
+                          content?:
+                            | T
+                            | {
+                                image?: T;
+                                altText?: T;
+                              };
+                          style?:
+                            | T
+                            | {
+                                space?:
+                                  | T
+                                  | {
+                                      mt?: T;
+                                      mb?: T;
+                                      ml?: T;
+                                      mr?: T;
+                                      pt?: T;
+                                      pb?: T;
+                                      pl?: T;
+                                      pr?: T;
+                                    };
+                                size?:
+                                  | T
+                                  | {
+                                      width?:
+                                        | T
+                                        | {
+                                            val?: T;
+                                            unit?: T;
+                                          };
+                                      height?:
+                                        | T
+                                        | {
+                                            val?: T;
+                                            unit?: T;
+                                          };
+                                    };
+                                pos?:
+                                  | T
+                                  | {
+                                      position?: T;
+                                      top?: T;
+                                      bottom?: T;
+                                      left?: T;
+                                      right?: T;
+                                      'z-index'?: T;
+                                    };
+                                bg?:
+                                  | T
+                                  | {
+                                      bg?: T;
+                                      bgImage?: T;
+                                      bgSize?: T;
+                                      bgPosition?: T;
+                                      bgRepeat?: T;
+                                      overlay?: T;
+                                      overlayColor?: T;
+                                      overlayOpacity?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+            };
+        style?:
+          | T
+          | {
+              layout?:
+                | T
+                | {
+                    display?: T;
+                    fd?: T;
+                    jc?: T;
+                    ai?: T;
+                    cgap?: T;
+                    rgap?: T;
+                    wrap?: T;
+                  };
+              space?:
+                | T
+                | {
+                    mt?: T;
+                    mb?: T;
+                    ml?: T;
+                    mr?: T;
+                    pt?: T;
+                    pb?: T;
+                    pl?: T;
+                    pr?: T;
+                  };
+              size?:
+                | T
+                | {
+                    width?:
+                      | T
+                      | {
+                          val?: T;
+                          unit?: T;
+                        };
+                    height?:
+                      | T
+                      | {
+                          val?: T;
+                          unit?: T;
+                        };
+                  };
+              pos?:
+                | T
+                | {
+                    position?: T;
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                    'z-index'?: T;
+                  };
+              tp?:
+                | T
+                | {
+                    textAlign?: T;
+                    fontWeight?: T;
+                    fontSize?: T;
+                    lineHeight?: T;
+                    color?: T;
+                    textTransform?: T;
+                  };
+              bg?:
+                | T
+                | {
+                    bg?: T;
+                    bgImage?: T;
+                    bgSize?: T;
+                    bgPosition?: T;
+                    bgRepeat?: T;
+                    overlay?: T;
+                    overlayColor?: T;
+                    overlayOpacity?: T;
+                  };
+            };
+        id?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test_select".
+ */
+export interface TestSelect<T extends boolean = true> {
+  layout?:
+    | T
+    | {
+        container_level_1?:
+          | T
+          | {
+              cssClasses?: T;
+              subFields?:
+                | T
+                | {
+                    container_level_2?:
+                      | T
+                      | {
+                          cssClasses?: T;
+                          subFields?:
+                            | T
+                            | {
+                                container_level_3?:
+                                  | T
+                                  | {
+                                      cssClasses?: T;
+                                      subFields?:
+                                        | T
+                                        | {
+                                            container_level_4?:
+                                              | T
+                                              | {
+                                                  cssClasses?: T;
+                                                  subFields?:
+                                                    | T
+                                                    | {
+                                                        container_level_5?:
+                                                          | T
+                                                          | {
+                                                              cssClasses?: T;
+                                                              subFields?:
+                                                                | T
+                                                                | {
+                                                                    container_level_6?:
+                                                                      | T
+                                                                      | {
+                                                                          cssClasses?: T;
+                                                                          subFields?:
+                                                                            | T
+                                                                            | {
+                                                                                text_widget?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      content?: T;
+                                                                                      color?: T;
+                                                                                      id?: T;
+                                                                                      blockName?: T;
+                                                                                    };
+                                                                                image_widget?:
+                                                                                  | T
+                                                                                  | {
+                                                                                      image?: T;
+                                                                                      altText?: T;
+                                                                                      id?: T;
+                                                                                      blockName?: T;
+                                                                                    };
+                                                                              };
+                                                                          layout?:
+                                                                            | T
+                                                                            | {
+                                                                                display?: T;
+                                                                                fd?: T;
+                                                                                jc?: T;
+                                                                                ai?: T;
+                                                                                cgap?: T;
+                                                                                rgap?: T;
+                                                                                wrap?: T;
+                                                                              };
+                                                                          spacing?:
+                                                                            | T
+                                                                            | {
+                                                                                mt?: T;
+                                                                                mb?: T;
+                                                                                ml?: T;
+                                                                                mr?: T;
+                                                                                pt?: T;
+                                                                                pb?: T;
+                                                                                pl?: T;
+                                                                                pr?: T;
+                                                                              };
+                                                                          id?: T;
+                                                                          blockName?: T;
+                                                                        };
+                                                                    text_widget?:
+                                                                      | T
+                                                                      | {
+                                                                          content?: T;
+                                                                          color?: T;
+                                                                          id?: T;
+                                                                          blockName?: T;
+                                                                        };
+                                                                    image_widget?:
+                                                                      | T
+                                                                      | {
+                                                                          image?: T;
+                                                                          altText?: T;
+                                                                          id?: T;
+                                                                          blockName?: T;
+                                                                        };
+                                                                  };
+                                                              layout?:
+                                                                | T
+                                                                | {
+                                                                    display?: T;
+                                                                    fd?: T;
+                                                                    jc?: T;
+                                                                    ai?: T;
+                                                                    cgap?: T;
+                                                                    rgap?: T;
+                                                                    wrap?: T;
+                                                                  };
+                                                              spacing?:
+                                                                | T
+                                                                | {
+                                                                    mt?: T;
+                                                                    mb?: T;
+                                                                    ml?: T;
+                                                                    mr?: T;
+                                                                    pt?: T;
+                                                                    pb?: T;
+                                                                    pl?: T;
+                                                                    pr?: T;
+                                                                  };
+                                                              id?: T;
+                                                              blockName?: T;
+                                                            };
+                                                        text_widget?:
+                                                          | T
+                                                          | {
+                                                              content?: T;
+                                                              color?: T;
+                                                              id?: T;
+                                                              blockName?: T;
+                                                            };
+                                                        image_widget?:
+                                                          | T
+                                                          | {
+                                                              image?: T;
+                                                              altText?: T;
+                                                              id?: T;
+                                                              blockName?: T;
+                                                            };
+                                                      };
+                                                  layout?:
+                                                    | T
+                                                    | {
+                                                        display?: T;
+                                                        fd?: T;
+                                                        jc?: T;
+                                                        ai?: T;
+                                                        cgap?: T;
+                                                        rgap?: T;
+                                                        wrap?: T;
+                                                      };
+                                                  spacing?:
+                                                    | T
+                                                    | {
+                                                        mt?: T;
+                                                        mb?: T;
+                                                        ml?: T;
+                                                        mr?: T;
+                                                        pt?: T;
+                                                        pb?: T;
+                                                        pl?: T;
+                                                        pr?: T;
+                                                      };
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            text_widget?:
+                                              | T
+                                              | {
+                                                  content?: T;
+                                                  color?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            image_widget?:
+                                              | T
+                                              | {
+                                                  image?: T;
+                                                  altText?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                          };
+                                      layout?:
+                                        | T
+                                        | {
+                                            display?: T;
+                                            fd?: T;
+                                            jc?: T;
+                                            ai?: T;
+                                            cgap?: T;
+                                            rgap?: T;
+                                            wrap?: T;
+                                          };
+                                      spacing?:
+                                        | T
+                                        | {
+                                            mt?: T;
+                                            mb?: T;
+                                            ml?: T;
+                                            mr?: T;
+                                            pt?: T;
+                                            pb?: T;
+                                            pl?: T;
+                                            pr?: T;
+                                          };
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                text_widget?:
+                                  | T
+                                  | {
+                                      content?: T;
+                                      color?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                image_widget?:
+                                  | T
+                                  | {
+                                      image?: T;
+                                      altText?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          layout?:
+                            | T
+                            | {
+                                display?: T;
+                                fd?: T;
+                                jc?: T;
+                                ai?: T;
+                                cgap?: T;
+                                rgap?: T;
+                                wrap?: T;
+                              };
+                          spacing?:
+                            | T
+                            | {
+                                mt?: T;
+                                mb?: T;
+                                ml?: T;
+                                mr?: T;
+                                pt?: T;
+                                pb?: T;
+                                pl?: T;
+                                pr?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    text_widget?:
+                      | T
+                      | {
+                          content?: T;
+                          color?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    image_widget?:
+                      | T
+                      | {
+                          image?: T;
+                          altText?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              layout?:
+                | T
+                | {
+                    display?: T;
+                    fd?: T;
+                    jc?: T;
+                    ai?: T;
+                    cgap?: T;
+                    rgap?: T;
+                    wrap?: T;
+                  };
+              spacing?:
+                | T
+                | {
+                    mt?: T;
+                    mb?: T;
+                    ml?: T;
+                    mr?: T;
+                    pt?: T;
+                    pb?: T;
+                    pl?: T;
+                    pr?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-mcp-api-keys_select".
+ */
+export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
+  user?: T;
+  label?: T;
+  description?: T;
+  page?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+      };
+  media?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

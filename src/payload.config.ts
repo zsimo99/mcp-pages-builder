@@ -4,9 +4,12 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { mcpPlugin } from '@payloadcms/plugin-mcp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Page } from './collections/Page'
+import Testo from './collections/Test'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -18,7 +21,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Page, Testo],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -30,5 +33,34 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    mcpPlugin({
+      collections: {
+        page: {
+          enabled: {
+            find: true,
+            create: true,  // Allow the agent to create pages
+            update: true,
+          },
+          description: 'Collection for landing pages. Contains a structural blocks layout field.',
+        },
+        media: {
+          enabled: {
+            find: true,
+            create: true,  // Allow the agent to upload assets if needed
+          },
+          description: 'Uploaded images, assets, and graphics used inside page blocks.',
+        },
+      },
+      overrideAuth: async (req, getDefaultMcpAccessSettings) => {
+        console.log("req", req)
+        const url = new URL(req.url || '', 'http://localhost')
+        const token = url.searchParams.get('token')
+        if (token) {
+          req.headers.set('Authorization', `Bearer ${token}`)
+        }
+        return getDefaultMcpAccessSettings()
+      },
+    }),
+  ],
 })
